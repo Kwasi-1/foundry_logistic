@@ -23,7 +23,7 @@ export const AppRouter = () => {
   return (
     <Suspense
       fallback={
-        <div className="flex h-screen overflow-hidden items-center justify-center bg-gray-50">
+        <div className="flex h-screen overflow-hidden items-center justify-center bg-primary-gray/30">
           <img
             src="/icons/logo-dark.svg"
             alt="Loading"
@@ -34,8 +34,8 @@ export const AppRouter = () => {
     >
       <ScrollToTop />
       <Routes>
-        {/* <Route path="/" element={<Navigate to="/dashboard" replace />} /> */}
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* <Route path="/" element={<DashboardPage />} /> */}
 
         <Route path="/dashboard" element={<MainDashboardLayout />}>
           <Route index element={<DashboardPage />} />

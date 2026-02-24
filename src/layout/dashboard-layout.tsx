@@ -1,5 +1,6 @@
 ﻿import * as React from "react";
 import { Menu, X, Bell, Settings, User, Eye, EyeOff } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useMoneyMask } from "@/hooks/use-money-mask";
@@ -46,9 +47,21 @@ export function DashboardLayout({
   showNotifications = true,
 }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
-  const [collapsed, setCollapsed] = React.useState(false);
+  const [collapsed, setCollapsed] = React.useState(true);
   const { isMasked, toggleMask } = useMoneyMask();
   const navigate = useNavigate();
+  const location = useLocation();
+  // When on the main dashboard, the sidebar floats over the hero — make it transparent & locked
+  const isWarehouseHome = location.pathname === "/dashboard";
+
+  // Auto-collapse when entering /dashboard, auto-expand when leaving
+  React.useEffect(() => {
+    if (isWarehouseHome) {
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
+    }
+  }, [isWarehouseHome]);
   const { logout } = useAuth0();
   const { userInfo, organization } = useAppSelector((s) => s.auth);
 
@@ -243,20 +256,29 @@ export function DashboardLayout({
         <Sidebar
           items={sidebarItems}
           collapsed={collapsed}
-          onCollapsedChange={setCollapsed}
+          onCollapsedChange={isWarehouseHome ? undefined : setCollapsed}
           logo={fullLogo}
           logoIcon={logo}
           headerAction={
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setCollapsed(!collapsed)}
-              className="h-8 w-8"
-            >
-              <Menu className="h-4 w-4" />
-            </Button>
+            // Hide the collapse toggle on the warehouse dashboard — sidebar is locked collapsed
+            !isWarehouseHome ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setCollapsed(!collapsed)}
+                className="h-8 w-8"
+              >
+                <Menu className="h-4 w-4" />
+              </Button>
+            ) : undefined
           }
           footer={sidebarFooter}
+          className={cn(
+            "transition-colors duration-300",
+            isWarehouseHome
+              ? "bg-transparent border-r border-white/10 [&_button]:text-white [&_span]:text-white/70"
+              : "bg-white",
+          )}
         />
       </div>
       {/* Mobile Sidebar Overlay */}
@@ -271,6 +293,11 @@ export function DashboardLayout({
               items={sidebarItems}
               logo={mobileLogo}
               logoIcon={logo}
+              className={cn(
+                isWarehouseHome
+                  ? "bg-black/60 backdrop-blur-md border-r border-white/10 [&_button]:text-white [&_span]:text-white/70"
+                  : "bg-white",
+              )}
               footer={
                 <div className="space-y-3">
                   {sidebarFooter}
@@ -290,21 +317,34 @@ export function DashboardLayout({
         </>
       )}
       {/* Main Content */}
-      <div className="flex flex-1 flex-col overflow-hidden ">
-        {/* Mobile Menu Button */}
-        <header className="sticky top-0 z-30 flex h-16 items-center bg-white px-6 lg:hidden">
+      <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Mobile Menu Button — transparent on warehouse home */}
+        <header
+          className={cn(
+            "sticky top-0 z-30 flex h-14 items-center px-4 lg:hidden transition-colors duration-300",
+            isWarehouseHome ? "bg-transparent" : "bg-white border-b",
+          )}
+        >
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setSidebarOpen(true)}
+            className={cn(isWarehouseHome && "text-white hover:bg-white/20")}
           >
             <Menu className="h-5 w-5" />
           </Button>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50">
-          <div className="h-full px-6 py-6">{children}</div>
+        {/* Page Content — no padding/bg on warehouse home so the hero bleeds edge-to-edge */}
+        <main
+          className={cn(
+            "flex-1 overflow-y-auto transition-colors duration-300",
+            isWarehouseHome ? "bg-transparent" : "bg-gray-50",
+          )}
+        >
+          <div className={cn("h-full", isWarehouseHome ? "p-0" : "px-6 py-6")}>
+            {children}
+          </div>
         </main>
       </div>
     </div>

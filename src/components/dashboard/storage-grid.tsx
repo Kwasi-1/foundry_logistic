@@ -1,264 +1,439 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
-import { StorageCell } from "./storage-cell";
 import { StorageDetailsPanel } from "./storage-details-panel";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import CustomContainerComponent from "../shared/custom.container.component";
 
-// Mock Data Generator
-const MOCK_CATEGORIES = [
-  "Electronics",
-  "Furniture",
-  "Apparel",
-  "Automotive",
-  "Groceries",
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+type CellStatus = "ready" | "stocked" | "archived" | "active" | "low";
+type SectionLayout = "2col" | "4col"; // narrow (2 units/row) or wide (4 units/row)
+
+interface StorageUnit {
+  id: string;
+  status: CellStatus;
+}
+
+interface StorageSection {
+  id: string;
+  label: string;
+  category: string;
+  status: CellStatus;
+  layout: SectionLayout;
+  units: StorageUnit[];
+  filled: number;
+  total: number;
+  highlighted?: boolean;
+}
+
+// ─── Mock Data ───────────────────────────────────────────────────────────────
+
+const UNIT_STATUSES: CellStatus[] = [
+  "ready",
+  "stocked",
+  "archived",
+  "active",
+  "low",
 ];
-const STATUS_OPTIONS = [
-  "full",
-  "partial",
-  "empty",
-  "reserved",
-  "low-stock",
-] as const;
 
-const generateMockGrid = (rows: number, cols: number) => {
-  const grid = [];
-  for (let r = 0; r < rows; r++) {
-    const rowId = String.fromCharCode(65 + r); // A, B, C...
-    for (let c = 1; c <= cols; c++) {
-      const id = `${rowId}${c}`;
+function generateUnits(prefix: string, count: number): StorageUnit[] {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `${prefix}${i + 1}`,
+    status: UNIT_STATUSES[Math.floor(Math.random() * UNIT_STATUSES.length)],
+  }));
+}
 
-      // Seed random behavior
-      const rand = Math.random();
-      let status: (typeof STATUS_OPTIONS)[number] = "empty";
-      let utilization = 0;
+function generateSections(): StorageSection[] {
+  const templates: Array<{
+    prefix: string;
+    layout: SectionLayout;
+    unitCount: number;
+    category: string;
+    status: CellStatus;
+    highlighted?: boolean;
+  }> = [
+    {
+      prefix: "A",
+      layout: "2col",
+      unitCount: 4,
+      category: "Bestsellers Shelf",
+      status: "ready",
+    },
+    {
+      prefix: "B",
+      layout: "4col",
+      unitCount: 8,
+      category: "Capsule Archive",
+      status: "stocked",
+    },
+    {
+      prefix: "C",
+      layout: "2col",
+      unitCount: 8,
+      category: "Capsule Archive",
+      status: "stocked",
+    },
+    {
+      prefix: "D",
+      layout: "4col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "E",
+      layout: "4col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "F",
+      layout: "2col",
+      unitCount: 4,
+      category: "Bestsellers Shelf",
+      status: "ready",
+    },
+    {
+      prefix: "G",
+      layout: "2col",
+      unitCount: 14,
+      category: "Capsule Archive",
+      status: "archived",
+    },
+    {
+      prefix: "G-PRIME",
+      layout: "4col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+      highlighted: true,
+    },
+    {
+      prefix: "H",
+      layout: "2col",
+      unitCount: 4,
+      category: "Bestsellers Shelf",
+      status: "ready",
+    },
+    {
+      prefix: "J",
+      layout: "4col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "K",
+      layout: "4col",
+      unitCount: 8,
+      category: "Wooden Furniture",
+      status: "stocked",
+    },
+    {
+      prefix: "L",
+      layout: "4col",
+      unitCount: 8,
+      category: "Capsule Archive",
+      status: "archived",
+    },
+    {
+      prefix: "M",
+      layout: "4col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "N",
+      layout: "2col",
+      unitCount: 8,
+      category: "Fully Stocked",
+      status: "stocked",
+    },
+    {
+      prefix: "P",
+      layout: "2col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "Q",
+      layout: "4col",
+      unitCount: 4,
+      category: "Bestsellers Shelf",
+      status: "ready",
+    },
+    {
+      prefix: "R",
+      layout: "4col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "S",
+      layout: "4col",
+      unitCount: 4,
+      category: "Bestsellers Shelf",
+      status: "ready",
+    },
+    {
+      prefix: "T",
+      layout: "2col",
+      unitCount: 14,
+      category: "Capsule Archive",
+      status: "archived",
+    },
+    {
+      prefix: "U",
+      layout: "4col",
+      unitCount: 4,
+      category: "Bestsellers Shelf",
+      status: "ready",
+    },
+    {
+      prefix: "V",
+      layout: "4col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "W",
+      layout: "4col",
+      unitCount: 7,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "X",
+      layout: "4col",
+      unitCount: 8,
+      category: "Ready-to-Ship",
+      status: "ready",
+    },
+    {
+      prefix: "Y",
+      layout: "4col",
+      unitCount: 8,
+      category: "Fully Stocked",
+      status: "stocked",
+    },
+  ];
 
-      if (rand > 0.85) {
-        status = "full";
-        utilization = Math.floor(Math.random() * 10 + 90);
-      } else if (rand > 0.5) {
-        status = "partial";
-        utilization = Math.floor(Math.random() * 60 + 20);
-      } else if (rand > 0.4) {
-        status = "reserved";
-        utilization = 100;
-      } else if (rand > 0.3) {
-        status = "low-stock";
-        utilization = Math.floor(Math.random() * 15 + 1);
-      }
-
-      const category =
-        MOCK_CATEGORIES[Math.floor(Math.random() * MOCK_CATEGORIES.length)];
-
-      const numItems =
-        status === "empty" ? 0 : Math.floor(Math.random() * 5) + 1;
-      const mockItems = Array.from({ length: numItems }).map((_, i) => ({
-        id: `ITM-${id}-${i}`,
-        name: `${category} Item ${i + 1}`,
-        sku: `SKU-${Math.floor(Math.random() * 100000)}`,
-        quantity: Math.floor(Math.random() * 500),
-        status:
-          status === "low-stock"
-            ? "Low Stock"
-            : ((status === "reserved" ? "Reserved" : "In Stock") as
-                | "In Stock"
-                | "Low Stock"
-                | "Reserved"),
-        lastUpdated: `${Math.floor(Math.random() * 24)}h ago`,
-      }));
-
-      grid.push({ id, status, category, utilization, mockItems });
-    }
-  }
-  return grid;
-};
-
-export function StorageGrid() {
-  const [selectedCell, setSelectedCell] = useState<{
-    id: string;
-    details: any;
-  } | null>(null);
-  const [filter, setFilter] = useState<string>("all");
-  const [gridData, setGridData] = useState(() => generateMockGrid(6, 12));
-
-  // Handle cell click
-  const handleCellClick = (id: string, details: any) => {
-    setSelectedCell({ id, details });
-  };
-
-  const handleRefresh = () => {
-    setGridData(generateMockGrid(6, 12));
-  };
-
-  const filteredGrid = useMemo(() => {
-    if (filter === "all") return gridData;
-    return gridData.map((cell) => ({
-      ...cell,
-      // Gray out non-matching cells slightly, but keep real data accessible
-      opacity: cell.status === filter ? "opacity-100" : "opacity-20 ",
-    }));
-  }, [filter, gridData]);
-
-  // Derived stats
-  const stats = useMemo(() => {
-    const total = gridData.length;
-    let full = 0,
-      partial = 0,
-      empty = 0,
-      reserved = 0,
-      low = 0;
-
-    gridData.forEach((c) => {
-      if (c.status === "full") full++;
-      else if (c.status === "partial") partial++;
-      else if (c.status === "empty") empty++;
-      else if (c.status === "reserved") reserved++;
-      else if (c.status === "low-stock") low++;
-    });
-
+  return templates.map((t) => {
+    const filled = Math.floor(Math.random() * t.unitCount);
+    const prefix = t.prefix === "G-PRIME" ? "G" : t.prefix;
     return {
-      total,
-      full,
-      partial,
-      empty,
-      reserved,
-      low,
-      utilPct: Math.round(((total - empty) / total) * 100),
+      id: t.prefix,
+      label: t.prefix === "G-PRIME" ? "G" : t.prefix,
+      category: t.category,
+      status: t.status,
+      layout: t.layout,
+      units: generateUnits(prefix, t.unitCount),
+      filled,
+      total: t.unitCount * 35,
+      highlighted: t.highlighted,
     };
-  }, [gridData]);
+  });
+}
+
+// ─── Sub-components ──────────────────────────────────────────────────────────
+
+function StorageUnitCell({
+  unit,
+  highlighted,
+  onClick,
+}: {
+  unit: StorageUnit;
+  highlighted?: boolean;
+  onClick: (id: string) => void;
+}) {
+  return (
+    <button
+      onClick={() => onClick(unit.id)}
+      className={cn(
+        "rounded-xl flex items-center justify-center font-bold text-xs transition-all duration-150 active:scale-95 select-none",
+        "h-9 w-full cursor-pointer",
+        highlighted
+          ? "bg-white text-gray-800 border border-white/80 shadow-sm hover:bg-gray-50"
+          : "bg-white text-gray-700 border border-gray-200 shadow-sm hover:bg-gray-50 hover:border-gray-300",
+      )}
+    >
+      {unit.id}
+    </button>
+  );
+}
+
+function StorageSectionCard({
+  section,
+  onUnitClick,
+}: {
+  section: StorageSection;
+  onUnitClick: (unitId: string, section: StorageSection) => void;
+}) {
+  const statusLabel: Record<CellStatus, string> = {
+    ready: "Ready-to-Ship",
+    stocked: "Fully Stocked",
+    archived: "Capsule Archive",
+    active: "Active",
+    low: "Low Stock",
+  };
+
+  const cols = section.layout === "4col" ? 4 : 2;
 
   return (
-    <CustomContainerComponent styles="bg-white p-4 sm:p-6 lg:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
-      {/* Subtle Background Pattern */}
+    <div
+      className={cn(
+        "relative rounded-2xl h-fit overflow-hidden flex flex-col gap-2 p-3",
+        section.highlighted
+          ? "bg-[#e8401a] shadow-md shadow-orange-200/80"
+          : "bg-primary-gray/30",
+      )}
+    >
+      {/* Diagonal stripe overlay for highlighted */}
+      {section.highlighted && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(135deg, rgba(255,255,255,0.07) 0px, rgba(255,255,255,0.07) 6px, transparent 6px, transparent 18px)",
+          }}
+        />
+      )}
+
+      {/* Category label */}
+      <p
+        className={cn(
+          "text-[10px] font-semibold uppercase tracking-wider truncate relative z-10",
+          section.highlighted ? "text-white/80" : "text-gray-500",
+        )}
+      >
+        {section.category}
+      </p>
+
+      {/* Unit Grid */}
       <div
-        className="absolute inset-x-0 bottom-0 h-96 bg-[url('/images/bg-grid.png')] opacity-5 pointer-events-none -z-0"
-        style={{
-          maskImage: "linear-gradient(to top, black 20%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to top, black 20%, transparent 100%)",
-        }}
-      />
-
-      <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 mb-1">
-            Warehouse Layout
-          </h2>
-          <div className="flex items-center gap-3">
-            <p className="text-sm text-gray-500 font-medium">
-              Zone A Optimization
-            </p>
-            <Badge variant="secondary" className="px-2 py-0 h-5 font-mono">
-              {stats.utilPct}% Utilized
-            </Badge>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 w-full sm:w-auto self-end">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleRefresh}
-            className="h-9 w-9"
-            title="Simulate updates"
-          >
-            <RefreshCcw className="h-4 w-4 text-gray-500" />
-          </Button>
-          <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="w-full sm:w-[160px] h-9 text-sm font-medium">
-              <SelectValue placeholder="Filter view" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="full">Full Capacity</SelectItem>
-              <SelectItem value="partial">Partially Filled</SelectItem>
-              <SelectItem value="empty">Empty Slots</SelectItem>
-              <SelectItem value="reserved">Reserved/Locked</SelectItem>
-              <SelectItem value="low-stock">Low Stock Alerts</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Legend */}
-      <div className="relative z-10 flex flex-wrap gap-x-6 gap-y-2 mb-8 items-center text-xs sm:text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-red-500 border border-red-600 shadow-sm" />
-          <span className="font-medium text-gray-600">
-            Full <span className="text-gray-400 ml-1">({stats.full})</span>
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-amber-400 border border-amber-500 shadow-sm" />
-          <span className="font-medium text-gray-600">
-            Partial{" "}
-            <span className="text-gray-400 ml-1">({stats.partial})</span>
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-white border border-gray-300" />
-          <span className="font-medium text-gray-600">
-            Empty <span className="text-gray-400 ml-1">({stats.empty})</span>
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-blue-500 border border-blue-600 shadow-sm" />
-          <span className="font-medium text-gray-600">
-            Reserved{" "}
-            <span className="text-gray-400 ml-1">({stats.reserved})</span>
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-orange-500 border border-orange-600 shadow-sm" />
-          <span className="font-medium text-gray-600">
-            Low Stock <span className="text-gray-400 ml-1">({stats.low})</span>
-          </span>
-        </div>
-      </div>
-
-      {/* The Grid */}
-      <div className="relative z-10 grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-3 sm:gap-4 p-4 sm:p-6 bg-gray-50/50 rounded-xl border border-gray-200">
-        {filteredGrid.map((cell) => (
-          <div
-            key={cell.id}
-            className={cn(
-              "transition-opacity duration-300",
-              "opacity" in cell ? cell.opacity : "",
-            )}
-          >
-            <StorageCell
-              id={cell.id}
-              status={cell.status}
-              category={cell.category}
-              utilization={cell.utilization}
-              mockItems={cell.mockItems}
-              onClick={handleCellClick}
-            />
-          </div>
+        className={cn(
+          "relative z-10 grid gap-1.5",
+          cols === 4 ? "grid-cols-4 min-w-[200px]" : "grid-cols-2 min-w-[96px]",
+        )}
+      >
+        {section.units.map((unit) => (
+          <StorageUnitCell
+            key={unit.id}
+            unit={unit}
+            highlighted={section.highlighted}
+            onClick={(id) => onUnitClick(id, section)}
+          />
         ))}
       </div>
 
-      {/* Detail Modal/Sheet */}
-      {selectedCell && (
+      {/* Footer */}
+      <div
+        className={cn(
+          "relative z-10 flex justify-between items-center pt-1 mt-auto",
+        )}
+      >
+        <span
+          className={cn(
+            "text-[9px] font-semibold uppercase tracking-wider",
+            section.highlighted ? "text-white/90" : "text-gray-500",
+          )}
+        >
+          {statusLabel[section.status]}
+        </span>
+        <span
+          className={cn(
+            "text-[9px] font-mono",
+            section.highlighted ? "text-white/80" : "text-gray-400",
+          )}
+        >
+          {section.highlighted
+            ? `Available: ${section.filled}/${section.total}`
+            : `${section.filled * 10} / ${section.total * 10}`}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Component ─────────────────────────────────────────────────────────
+
+export function StorageGrid() {
+  const [sections, setSections] = useState<StorageSection[]>(() =>
+    generateSections(),
+  );
+  const [selectedDetails, setSelectedDetails] = useState<{
+    cellId: string;
+    status: string;
+    category: string;
+    capacityStr: string;
+    items: any[];
+  } | null>(null);
+
+  const handleRefresh = () => setSections(generateSections());
+
+  const handleUnitClick = (unitId: string, section: StorageSection) => {
+    setSelectedDetails({
+      cellId: unitId,
+      status: section.status,
+      category: section.category,
+      capacityStr: `${section.filled * 10} / ${section.total * 10} items`,
+      items: [],
+    });
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col">
+      {/* ── Toolbar ─────────────────────────────────────────────────────── */}
+      <div className="flex items-center justify-between mb-3 px-1">
+        <div>
+          <h2 className="text-sm font-bold text-gray-800 tracking-tight">
+            Warehouse Layout
+          </h2>
+          <p className="text-[10px] text-gray-500 font-medium mt-0.5">
+            Zone A · {sections.length} sections
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleRefresh}
+          className="h-7 w-7 text-gray-500 hover:text-gray-700 hover:bg-primary-gray/50"
+          title="Refresh layout"
+        >
+          <RefreshCcw className="h-3.5 w-3.5" />
+        </Button>
+      </div>
+
+      {/* ── Scrollable Flex Wrap ─────────────────────────────────────────── */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <div className="flex flex-wrap gap-2 content-start">
+          {sections.map((section) => (
+            <StorageSectionCard
+              key={section.id}
+              section={section}
+              onUnitClick={handleUnitClick}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* ── Detail Panel ─────────────────────────────────────────────────── */}
+      {selectedDetails && (
         <StorageDetailsPanel
-          isOpen={!!selectedCell}
-          onClose={() => setSelectedCell(null)}
-          cellId={selectedCell.id}
-          status={selectedCell.details.status}
-          category={selectedCell.details.category}
-          capacityStr={selectedCell.details.capacityStr}
-          items={selectedCell.details.items}
+          isOpen={!!selectedDetails}
+          onClose={() => setSelectedDetails(null)}
+          cellId={selectedDetails.cellId}
+          status={selectedDetails.status}
+          category={selectedDetails.category}
+          capacityStr={selectedDetails.capacityStr}
+          items={selectedDetails.items}
         />
       )}
-    </CustomContainerComponent>
+    </div>
   );
 }

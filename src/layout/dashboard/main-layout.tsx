@@ -149,7 +149,9 @@ export default function MainDashboardLayout({
     <DashboardLayout
       showNotifications={false}
       className=""
-      logo={<img src="/images/logo-dark.svg" className="w-5" />}
+      logo={
+        <img src="/images/logo-dark.svg" className="w-5" alt="Foundry logo" />
+      }
       appName="Foundry"
       sidebarItems={filteredSidebarItems}
       user={{
@@ -158,7 +160,8 @@ export default function MainDashboardLayout({
         avatar: "",
       }}
     >
-      {children}
+      {/* <Outlet /> renders the matched child route (e.g. DashboardPage at /dashboard) */}
+      <Outlet />
     </DashboardLayout>
   );
 }

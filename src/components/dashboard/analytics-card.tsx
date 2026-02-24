@@ -91,9 +91,6 @@ export function AnalyticsCard({
     >
       <div className="flex justify-between items-start mb-4 relative z-10">
         <div>
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-widest">
-            {title}
-          </h3>
           <p className="text-3xl font-bold text-gray-900 mt-2 tracking-tight">
             {value}
           </p>
@@ -115,7 +112,7 @@ export function AnalyticsCard({
         </div>
       </div>
 
-      <div className="h-[60px] w-full mt-4 -mx-2 -mb-2 relative z-0 opacity-60 group-hover:opacity-100 transition-opacity">
+      <div className="h-[60px] w-full mt-4 -mx-2 -mb-2 relative z-0 opacity-60 group-hover:opacity-100 transition-opacity hidden">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
             <defs>
