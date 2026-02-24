@@ -108,7 +108,6 @@ function generateSections(): StorageSection[] {
       unitCount: 8,
       category: "Ready-to-Ship",
       status: "ready",
-      highlighted: true,
     },
     {
       prefix: "H",
@@ -123,6 +122,7 @@ function generateSections(): StorageSection[] {
       unitCount: 8,
       category: "Ready-to-Ship",
       status: "ready",
+      highlighted: true,
     },
     {
       prefix: "K",
