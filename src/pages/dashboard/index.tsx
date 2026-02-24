@@ -18,26 +18,7 @@ export default function Dashboard() {
       className="relative bg-transparent custom-font"
       style={{ height: "calc(100vh - 0px)" }}
     >
-      {/* ── BACKGROUND: HERO IMAGE ─────────────────────────────────────────
-          Fills the entire viewport. Pointer-events none so overlays are
-          fully interactive.
-      ──────────────────────────────────────────────────────────────────── */}
       <div className="absolute inset-0 z-0 flex items-center justify-center bgprimary-gray overflow-hidden">
-        {/* Faint label at top-center */}
-        {/* <div className="absolute top-12 left-1/2 -translate-x-1/2 z-10 text-center pointer-events-none select-none">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-0.5">
-            Zone A · Distribution Hub
-          </p>
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-xs font-semibold text-gray-700">
-              Available Storage Space
-            </span>
-            <span className="bg-primary-green text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
-              Live
-            </span>
-          </div>
-        </div> */}
-
         <img
           src="/images/landling_hero.png"
           alt="Warehouse Facility"
@@ -46,9 +27,6 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* ── TOP: FLOATING SEARCH BAR ───────────────────────────────────────
-          Fixed to top, centered, above everything.
-      ──────────────────────────────────────────────────────────────────── */}
       <div className="hidden absolute top-0 left-0 right-0 z-30 flex items-center justify-center px-6 py-3">
         <div className="relative w-full max-w-lg">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -61,9 +39,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── TOP-LEFT: WELCOME HEADER ───────────────────────────────────────
-          Displays a welcome greeting over the hero background.
-      ──────────────────────────────────────────────────────────────────── */}
       <div className="absolute top-8 left-8 z-30 pointer-events-auto">
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
           Welcome back, <span className="text-primary-green">Gibson</span> 👋
@@ -73,16 +48,7 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* ── FOREGROUND OVERLAY LAYER ────────────────────────────────────────
-          This layer sits above the hero image and holds both panels.
-          It is NOT scrollable itself — only the inner panels scroll.
-      ──────────────────────────────────────────────────────────────────── */}
       <div className="absolute inset-0 z-20 pointer-events-none flex items-end">
-        {/* ── LEFT: WAREHOUSE LAYOUT PANEL ──────────────────────────────────
-            Anchored to bottom-left. ~40vh tall initially.
-            Scrollable upward (overflow-y-auto) to reveal full content.
-            pointer-events-auto re-enables interaction inside this panel.
-        ──────────────────────────────────────────────────────────────────── */}
         <div
           className="pointer-events-auto flex-1 overflow-y-auto scrollbar-hide ml-4"
           style={{ maxHeight: "42vh" }}
@@ -90,10 +56,6 @@ export default function Dashboard() {
           <StorageGrid />
         </div>
 
-        {/* ── RIGHT: STACKED STAT CARDS PANEL ───────────────────────────────
-            Anchored to bottom-right. Full height, scrollable.
-            pointer-events-auto re-enables interaction.
-        ──────────────────────────────────────────────────────────────────── */}
         <div
           className="pointer-events-auto w-full xl:w-[400px] flex-shrink overflow-y-auto scrollbar-hide"
           style={{ maxHeight: "calc(100vh - 48px)", marginTop: "48px" }}

@@ -315,11 +315,10 @@ function StorageSectionCard({
         {section.category}
       </p>
 
-      {/* Unit Grid */}
       <div
         className={cn(
-          "relative z-10 grid gap-1.5",
-          cols === 4 ? "grid-cols-4 min-w-[200px]" : "grid-cols-2 min-w-[96px]",
+          "relative z-10 grid gap-1.5 w-full",
+          cols === 4 ? "grid-cols-4" : "grid-cols-2",
         )}
       >
         {section.units.map((unit) => (
@@ -389,54 +388,55 @@ export function StorageGrid() {
 
   return (
     <CustomContainerComponent styles="bg-white p-3 w-full min-h-full">
-    <div className="w-full h-full flex flex-col">
-      {/* ── Toolbar ─────────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between mb-3 px-1">
-        <div>
-          <h2 className="text-lg font-bold text-gray-800">
-            Warehouse Layout
-          </h2>
-          <p className="text-[10px] text-gray-500 font-medium mt-0.5">
-            Zone A · {sections.length} sections
-          </p>
+      <div className="w-full h-full flex flex-col">
+        {/* ── Toolbar ─────────────────────────────────────────────────────── */}
+        <div className="flex items-center justify-between mb-3 px-1">
+          <div>
+            <h2 className="text-lg font-bold text-gray-800">
+              Warehouse Layout
+            </h2>
+            <p className="text-[10px] text-gray-500 font-medium mt-0.5">
+              Zone A · {sections.length} sections
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleRefresh}
+            className="h-7 w-7 text-gray-500 hover:text-gray-700 hover:bg-primary-gray/50"
+            title="Refresh layout"
+          >
+            <RefreshCcw className="h-3.5 w-3.5" />
+          </Button>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleRefresh}
-          className="h-7 w-7 text-gray-500 hover:text-gray-700 hover:bg-primary-gray/50"
-          title="Refresh layout"
-        >
-          <RefreshCcw className="h-3.5 w-3.5" />
-        </Button>
-      </div>
 
-      {/* ── Scrollable Flex Wrap ─────────────────────────────────────────── */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide">
-        <div className="flex flex-wrap gap-2 content-start">
-          {sections.map((section) => (
-            <StorageSectionCard
-              key={section.id}
-              section={section}
-              onUnitClick={handleUnitClick}
-            />
-          ))}
+        {/* ── Scrollable Masonry Layout ────────────────────────────────────── */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide pr-1">
+          <div className="columns-[260px] gap-3 pb-8">
+            {sections.map((section) => (
+              <div key={section.id} className="break-inside-avoid mb-3">
+                <StorageSectionCard
+                  section={section}
+                  onUnitClick={handleUnitClick}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* ── Detail Panel ─────────────────────────────────────────────────── */}
-      {selectedDetails && (
-        <StorageDetailsPanel
-          isOpen={!!selectedDetails}
-          onClose={() => setSelectedDetails(null)}
-          cellId={selectedDetails.cellId}
-          status={selectedDetails.status}
-          category={selectedDetails.category}
-          capacityStr={selectedDetails.capacityStr}
-          items={selectedDetails.items}
-        />
-      )}
-    </div>
+        {/* ── Detail Panel ─────────────────────────────────────────────────── */}
+        {selectedDetails && (
+          <StorageDetailsPanel
+            isOpen={!!selectedDetails}
+            onClose={() => setSelectedDetails(null)}
+            cellId={selectedDetails.cellId}
+            status={selectedDetails.status}
+            category={selectedDetails.category}
+            capacityStr={selectedDetails.capacityStr}
+            items={selectedDetails.items}
+          />
+        )}
+      </div>
     </CustomContainerComponent>
   );
 }
