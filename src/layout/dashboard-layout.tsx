@@ -277,7 +277,7 @@ export function DashboardLayout({
             "transition-colors duration-300",
             isWarehouseHome
               ? "bg-transparent border-r border-white/10 [&_button]:text-white [&_span]:text-white/70"
-              : "bg-white",
+              : "bg-white border-r border-primary-gray/70",
           )}
         />
       </div>
@@ -339,10 +339,10 @@ export function DashboardLayout({
         <main
           className={cn(
             "flex-1 overflow-y-auto transition-colors duration-300",
-            isWarehouseHome ? "bg-transparent" : "bg-gray-50",
+            isWarehouseHome ? "bg-transparent" : "bg-white",
           )}
         >
-          <div className={cn("h-full", isWarehouseHome ? "p-0" : "px-6 py-6")}>
+          <div className={cn("h-full", isWarehouseHome ? "p-0" : "p-0")}>
             {children}
           </div>
         </main>

@@ -5,14 +5,28 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import CustomContainerComponent from "@/components/shared/custom.container.component";
+import PageLayout from "@/layout/PageLayout";
 
 export default function WarehouseLayoutPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col h-[calc(100vh-48px)] bg-gray-50 -m-6 p-6">
+    <PageLayout
+    title="Warehouse Layout"
+      actions={
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full bg-white border shadow-sm hover:bg-gray-100 h-9 w-9"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft className="h-4 w-4 text-gray-700" />
+        </Button>
+      }
+      className="-m6 w-full"
+    >
       {/* ── HEADER ───────────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-3 mb-6 flex-shrink-0">
+      {/* <div className="flex items-center gap-3 mb-6 flex-shrink-0">
         <Button
           variant="ghost"
           size="icon"
@@ -29,10 +43,10 @@ export default function WarehouseLayoutPage() {
             Detailed view of Zone A · Distribution Hub
           </p>
         </div>
-      </div>
+      </div> */}
 
       {/* ── HORIZONTAL ANALYTICS CARDS ───────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 flex-shrink-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-3 flex-shrink-0">
         <AnalyticsCard
           title="Total Product Stock"
           value="142,850"
@@ -40,7 +54,7 @@ export default function WarehouseLayoutPage() {
           trendValue="12.4"
           timeContext="vs Last Month"
           hideAction
-          className=" border border-gray-100"
+          className="bg-primary-gray/30"
         />
         <AnalyticsCard
           title="Total Check-ins"
@@ -49,7 +63,7 @@ export default function WarehouseLayoutPage() {
           trendValue="29.0"
           timeContext="This Week"
           hideAction
-          className=" border border-gray-100"
+          className="bg-primary-gray/30"
         />
         <AnalyticsCard
           title="Total Check-outs"
@@ -58,7 +72,7 @@ export default function WarehouseLayoutPage() {
           trendValue="4.2"
           timeContext="This Week"
           hideAction
-          className=" border border-gray-100"
+          className="bg-primary-gray/30"
         />
         <AnalyticsCard
           title="Low Stock Warning"
@@ -67,14 +81,14 @@ export default function WarehouseLayoutPage() {
           trendValue="15.0"
           timeContext="Active Items"
           hideAction
-          className=" border border-gray-100"
+          className="bg-primary-gray/30"
         />
       </div>
 
       {/* ── WAREHOUSE STORAGE GRID ───────────────────────────────────────── */}
       <div className="flex-1 min-h-0 h-full relative">
-        <StorageGrid />
+        <StorageGrid showToolbar={false} className="bg-primary-gray/30" />
       </div>
-    </div>
+    </PageLayout>
   );
 }

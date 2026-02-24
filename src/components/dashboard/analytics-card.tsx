@@ -44,9 +44,9 @@ export function AnalyticsCard({
       {/* ── Row 1: Expand button (top-right only) ─────────────────────── */}
 
       {/* ── Row 2: Title & Value ─────────────────────────────────────── */}
-      <div className="flex justify-between mb-6">
+      <div className="flex justify-between mb6">
         <div className="flex flex-col gap-1.5 mb-2">
-          <p className="text-xs font-semibold text-[#8B98A6] uppercase tracking-wider leading-none">
+          <p className="text-xs font-semibold text-[#8B98A6] uppercase tracking-wider leading-none mb-4">
             {title}
           </p>
           <p className="text-3xl font-bold text-[#111827] tracking-tight leading-none mb-1">

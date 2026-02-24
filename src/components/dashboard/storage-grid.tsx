@@ -256,11 +256,11 @@ function StorageUnitCell({
     <button
       onClick={() => onClick(unit.id)}
       className={cn(
-        "rounded-xl flex items-center justify-center font-bold text-xs transition-all duration-150 active:scale-95 select-none",
+        "rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-150 active:scale-95 select-none",
         "h-9 w-full cursor-pointer",
         highlighted
-          ? "bg-white text-gray-800 border border-white/80 shadow-sm hover:bg-gray-50"
-          : "bg-white text-gray-700 border border-gray-200 shadow-sm hover:bg-gray-50 hover:border-gray-300",
+          ? "bg-white text-gray-800 border border-white/80 shadowsm hover:bg-gray-50"
+          : "bg-white text-gray-700 border border-gray-200 shadowsm hover:bg-gray-50 hover:border-gray-300",
       )}
     >
       {unit.id}
@@ -288,7 +288,7 @@ function StorageSectionCard({
   return (
     <div
       className={cn(
-        "relative rounded-2xl h-fit overflow-hidden flex flex-col gap-2 p-3",
+        "relative rounded-xl h-fit overflow-hidden flex flex-col gap-2 p-3 border border-gray-200",
         section.highlighted
           ? "bg-primary-green shadow-md shadow-orange-200/80"
           : "bg-primary-gray/30",
@@ -362,7 +362,7 @@ function StorageSectionCard({
 
 // ─── Main Component ─────────────────────────────────────────────────────────
 
-export function StorageGrid() {
+export function StorageGrid({showToolbar = true, className}: {showToolbar?: boolean, className?: string} ) {
   const [sections, setSections] = useState<StorageSection[]>(() =>
     generateSections(),
   );
@@ -387,14 +387,15 @@ export function StorageGrid() {
   };
 
   return (
-    <CustomContainerComponent styles="bg-white p-3 w-full min-h-full">
+    <CustomContainerComponent styles={`bg-white p-3 w-full min-h-full ${className}`}>
       <div className="w-full h-full flex flex-col">
         {/* ── Toolbar ─────────────────────────────────────────────────────── */}
-        <div className="flex items-center justify-between mb-3 px-1">
-          <div>
-            <h2 className="text-lg font-bold text-gray-800">
-              Warehouse Layout
-            </h2>
+        {showToolbar && (
+          <div className="flex items-center justify-between mb-3 px-1">
+            <div>
+              <h2 className="text-lg font-bold text-gray-800">
+                Warehouse Layout
+              </h2>
             <p className="text-[10px] text-gray-500 font-medium mt-0.5">
               Zone A · {sections.length} sections
             </p>
@@ -409,6 +410,7 @@ export function StorageGrid() {
             <RefreshCcw className="h-3.5 w-3.5" />
           </Button>
         </div>
+        )}
 
         {/* ── Scrollable Masonry Layout ────────────────────────────────────── */}
         <div className="flex-1 overflow-y-auto scrollbar-hide pr-1">
