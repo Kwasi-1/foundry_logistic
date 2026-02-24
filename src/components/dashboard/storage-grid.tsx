@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CustomContainerComponent from "../shared/custom.container.component";
 
 // Mock Data Generator
 const MOCK_CATEGORIES = [
@@ -136,7 +137,7 @@ export function StorageGrid() {
   }, [gridData]);
 
   return (
-    <div className="bg-white p-4 sm:p-6 lg:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
+    <CustomContainerComponent styles="bg-white p-4 sm:p-6 lg:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
       {/* Subtle Background Pattern */}
       <div
         className="absolute inset-x-0 bottom-0 h-96 bg-[url('/images/bg-grid.png')] opacity-5 pointer-events-none -z-0"
@@ -258,6 +259,6 @@ export function StorageGrid() {
           items={selectedCell.details.items}
         />
       )}
-    </div>
+    </CustomContainerComponent>
   );
 }
