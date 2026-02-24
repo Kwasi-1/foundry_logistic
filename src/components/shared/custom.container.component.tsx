@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 import { FC } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 interface CustomContainerComponentProps {
   children: React.ReactNode;
@@ -30,7 +30,7 @@ const CustomContainerComponent: FC<CustomContainerComponentProps> = ({
     <div
       className={cn(
         `w-full h-full flex flex-col bg-primary-gray/20 p-4`,
-        styles
+        styles,
       )}
     >
       {(title || titleElement || button) && (
@@ -43,7 +43,7 @@ const CustomContainerComponent: FC<CustomContainerComponentProps> = ({
             <Button
               onClick={button.onClick}
               disabled={button.disabled}
-              variant='ghost'
+              variant="ghost"
               size={
                 button.size === "sm"
                   ? "sm"
@@ -62,8 +62,8 @@ const CustomContainerComponent: FC<CustomContainerComponentProps> = ({
                       "className",
                       "variant",
                       "size",
-                    ].includes(key)
-                )
+                    ].includes(key),
+                ),
               )}
             >
               {button.icon}

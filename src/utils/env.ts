@@ -1,14 +1,17 @@
 const environment = import.meta.env;
 
-export const variables = () => ({
+export const variables = (_segment?: string) => ({
   AUTH0_DOMAIN: environment.VITE_AUTH0_DOMAIN,
   AUTH0_CLIENTID: environment.VITE_AUTH0_CLIENTID,
   AUTH0_AUDIENCE: environment.VITE_AUTH0_AUDIENCE,
-  ENVIRONMENT: "dev",
+  ENVIRONMENT: environment.VITE_ENVIRONMENT || "dev",
   SUBCRIPTION_SERVICE: environment.VITE_SUBCRIPTION_SERVICE,
   BUSINESS_API: environment.VITE_BUSINESS_API_BASE_URL,
   CREDIT_MODEL: environment.VITE_CREDIT_MODEL_URL,
   POS_API: environment.VITE_POS_API,
   APPOINTMENT_API_BASEURL: environment.VITE_BUSINESS_API_BASE_URL,
   DASHBOARD_API: environment.VITE_DASHBOARD_API,
+  BASE_URL: environment.VITE_DASHBOARD_API?.trim(),
+  SUB_SERVICE: environment.VITE_SUBCRIPTION_SERVICE,
+  HR_ACCOUNTING_BASE_URL: environment.VITE_BUSINESS_API_BASE_URL,
 });

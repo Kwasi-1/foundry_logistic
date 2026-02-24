@@ -4,6 +4,7 @@ interface MutateOptions {
   url: string;
   data?: any;
   method?: string;
+  header?: any;
 }
 
 /**
@@ -14,5 +15,6 @@ export const mutateFn = async (options: MutateOptions): Promise<any> => {
     url: options.url,
     method: options.method || "POST",
     data: options.data,
+    header: options.header,
   });
 };

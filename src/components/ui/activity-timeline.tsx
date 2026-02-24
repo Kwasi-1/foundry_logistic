@@ -1,10 +1,10 @@
-import * as React from "react";
+﻿import * as React from "react";
 import type { LucideIcon } from "lucide-react";
 import { Paperclip } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import { Badge } from "./badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 type Tone = "default" | "success" | "warning" | "danger" | "info";
 
@@ -104,10 +104,7 @@ export function ActivityTimeline({
                   </span>
                 ) : item.actor ? (
                   <Avatar className="h-12 w-12 border border-gray-300">
-                    <AvatarImage
-                      src={item.actor?.avatar}
-                      alt={actorName}
-                    />
+                    <AvatarImage src={item.actor?.avatar} alt={actorName} />
                     <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
                 ) : (
@@ -117,7 +114,7 @@ export function ActivityTimeline({
                       tone.indicator,
                     )}
                   >
-                    {item.badge?.slice(0, 3) || "•"}
+                    {item.badge?.slice(0, 3) || "â€¢"}
                   </span>
                 )}
               </div>

@@ -1,30 +1,30 @@
-import * as React from "react"
-import * as Popover from "@radix-ui/react-popover"
-import { Search, ChevronDown, X, Plus } from "lucide-react"
+﻿import * as React from "react";
+import * as Popover from "@radix-ui/react-popover";
+import { Search, ChevronDown, X, Plus } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Input } from "./input"
-import { Checkbox } from "./checkbox"
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export type MultiSelectOption = {
-  value: string
-  label: string
-  description?: string
-  leading?: React.ReactNode
-}
+  value: string;
+  label: string;
+  description?: string;
+  leading?: React.ReactNode;
+};
 
 export interface MultiSelectProps {
-  options: MultiSelectOption[]
-  value?: string[]
-  defaultValue?: string[]
-  onChange?: (value: string[]) => void
-  placeholder?: string
-  label?: string
-  labelPlacement?: "inside" | "outside"
-  onCreateOption?: () => void
-  createOptionLabel?: string
-  emptyMessage?: string
-  className?: string
+  options: MultiSelectOption[];
+  value?: string[];
+  defaultValue?: string[];
+  onChange?: (value: string[]) => void;
+  placeholder?: string;
+  label?: string;
+  labelPlacement?: "inside" | "outside";
+  onCreateOption?: () => void;
+  createOptionLabel?: string;
+  emptyMessage?: string;
+  className?: string;
 }
 
 export function MultiSelect({
@@ -40,52 +40,63 @@ export function MultiSelect({
   emptyMessage = "No results found",
   className,
 }: MultiSelectProps) {
-  const isControlled = value !== undefined
-  const [internalValue, setInternalValue] = React.useState<string[]>(defaultValue)
-  const selected = isControlled ? value! : internalValue
-  const [search, setSearch] = React.useState("")
+  const isControlled = value !== undefined;
+  const [internalValue, setInternalValue] =
+    React.useState<string[]>(defaultValue);
+  const selected = isControlled ? value! : internalValue;
+  const [search, setSearch] = React.useState("");
 
   const toggleValue = (val: string) => {
-    const exists = selected.includes(val)
-    const next = exists ? selected.filter((item) => item !== val) : [...selected, val]
+    const exists = selected.includes(val);
+    const next = exists
+      ? selected.filter((item) => item !== val)
+      : [...selected, val];
     if (!isControlled) {
-      setInternalValue(next)
+      setInternalValue(next);
     }
-    onChange?.(next)
-  }
+    onChange?.(next);
+  };
 
   const clearSelection = () => {
     if (!isControlled) {
-      setInternalValue([])
+      setInternalValue([]);
     }
-    onChange?.([])
-  }
+    onChange?.([]);
+  };
 
   const filteredOptions = React.useMemo(() => {
-    if (!search) return options
+    if (!search) return options;
     return options.filter(
       (option) =>
         option.label.toLowerCase().includes(search.toLowerCase()) ||
         option.description?.toLowerCase().includes(search.toLowerCase()),
-    )
-  }, [options, search])
+    );
+  }, [options, search]);
 
   const summaryLabel = React.useMemo(() => {
-    if (selected.length === 0) return placeholder
+    if (selected.length === 0) return placeholder;
     if (selected.length === 1) {
-      return options.find((opt) => opt.value === selected[0])?.label ?? placeholder
+      return (
+        options.find((opt) => opt.value === selected[0])?.label ?? placeholder
+      );
     }
-    const first = options.find((opt) => opt.value === selected[0])?.label ?? "Option"
-    return `${first} +${selected.length - 1} more`
-  }, [selected, options, placeholder])
+    const first =
+      options.find((opt) => opt.value === selected[0])?.label ?? "Option";
+    return `${first} +${selected.length - 1} more`;
+  }, [selected, options, placeholder]);
 
-  const showInsideLabel = labelPlacement !== "outside"
+  const showInsideLabel = labelPlacement !== "outside";
 
   return (
     <Popover.Root>
       <div className={cn("flex w-full flex-col", className)}>
         {labelPlacement === "outside" && label && (
-          <p className="mb-2 text-sm font-medium text-gray-900" style={{ letterSpacing: '-0.8px' }}>{label}</p>
+          <p
+            className="mb-2 text-sm font-medium text-gray-900"
+            style={{ letterSpacing: "-0.8px" }}
+          >
+            {label}
+          </p>
         )}
         <Popover.Trigger asChild>
           <button
@@ -94,7 +105,10 @@ export function MultiSelect({
           >
             {showInsideLabel ? (
               <div className="flex-1 text-left">
-                <p className="text-xs uppercase text-muted-foreground" style={{ letterSpacing: '-0.8px' }}>
+                <p
+                  className="text-xs uppercase text-muted-foreground"
+                  style={{ letterSpacing: "-0.8px" }}
+                >
                   {label}
                 </p>
                 <p
@@ -158,7 +172,7 @@ export function MultiSelect({
                   </p>
                 )}
                 {filteredOptions.map((option) => {
-                  const isChecked = selected.includes(option.value)
+                  const isChecked = selected.includes(option.value);
                   return (
                     <button
                       key={option.value}
@@ -185,11 +199,13 @@ export function MultiSelect({
                           {option.label}
                         </span>
                         {option.description && (
-                          <span className="text-xs leading-relaxed text-muted-foreground">{option.description}</span>
+                          <span className="text-xs leading-relaxed text-muted-foreground">
+                            {option.description}
+                          </span>
                         )}
                       </div>
                     </button>
-                  )
+                  );
                 })}
               </div>
               {onCreateOption && (
@@ -207,5 +223,5 @@ export function MultiSelect({
         </Popover.Portal>
       </div>
     </Popover.Root>
-  )
+  );
 }

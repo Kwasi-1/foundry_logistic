@@ -1,20 +1,24 @@
-import { DashboardLayout } from "@/components/layouts/dashboard-layout";
+﻿import { DashboardLayout } from "@/layout/dashboard-layout";
 import { useAppSelector } from "@/store/store";
 import { ReactNode } from "react";
 import { SidebarNavItem } from "@/components/ui/sidebar";
 import {
   IconlyHome,
-  IconlyBankCard,
-  IconlyBag,
-  IconlyDocument,
-} from "./components/icons";
+  IconlyDeliveryBox2,
+  IconlyStore,
+  IconlyBuilding,
+  IconlyBuildingoffice,
+  IconlyPaper,
+  IconlyWork,
+} from "@/icons/Iconly-icons";
 import { usePermission } from "@/hooks/use-permission";
 import { PERMISSIONS } from "@/utils/permissions";
+import { Outlet } from "react-router-dom";
 
 export default function MainDashboardLayout({
   children,
 }: {
-  children: ReactNode;
+  children?: ReactNode;
 }) {
   const { userInfo } = useAppSelector((s) => s.auth);
   const { can } = usePermission();
@@ -52,86 +56,71 @@ export default function MainDashboardLayout({
 
   const sidebarItems: SidebarNavItem[] = [
     {
-      title: "Home",
+      title: "Dashboard",
       icon: <IconlyHome size={20} />,
       href: "/dashboard",
     },
     {
-      title: "Accounting",
-      icon: <IconlyBankCard />,
+      title: "Inventory",
+      icon: <IconlyStore size={20} />,
       items: [
+        { title: "All Items", href: "/dashboard/inventory/items" },
+        { title: "Stock Levels", href: "/dashboard/inventory/stock" },
+        { title: "Categories", href: "/dashboard/inventory/categories" },
+      ],
+    },
+    {
+      title: "Orders",
+      icon: <IconlyWork size={20} />,
+      items: [
+        { title: "Sales Orders", href: "/dashboard/orders/sales" },
+        { title: "Purchase Orders", href: "/dashboard/orders/purchase" },
+      ],
+    },
+    {
+      title: "Shipments",
+      icon: <IconlyDeliveryBox2 size={20} />,
+      items: [
+        { title: "Inbound", href: "/dashboard/shipments/inbound" },
+        { title: "Outbound", href: "/dashboard/shipments/outbound" },
+        { title: "Tracking", href: "/dashboard/shipments/tracking" },
+      ],
+    },
+    {
+      title: "Warehouses",
+      icon: <IconlyBuilding size={20} />,
+      items: [
+        { title: "Locations", href: "/dashboard/warehouses/locations" },
         {
-          title: "Accounts",
-        },
-        {
-          title: "Chart of Accounts",
-        },
-        {
-          title: "Journal Entries",
+          title: "Internal Transfers",
+          href: "/dashboard/warehouses/transfers",
         },
       ],
     },
     {
-      title: "Sales",
-      icon: <IconlyBag size={20} />,
+      title: "Partners",
+      icon: <IconlyBuildingoffice size={20} />,
       items: [
-        {
-          title: "Invoices",
-          href: "/dashboard/sales/invoices",
-        },
-        {
-          title: "POS Invoices",
-          href: "/dashboard/sales/pos-invoice",
-        },
-        {
-          title: "Customers",
-          href: "/dashboard/sales/customers",
-        },
-      ],
-    },
-    {
-      title: "Purchase",
-      icon: <IconlyBankCard size={20} />,
-      items: [
-        {
-          title: "Bills",
-          href: "/dashboard/purchase/bills",
-        },
-        {
-          title: "Purchase Orders",
-          href: "/dashboard/purchase/purchase-orders",
-        },
-        {
-          title: "Catalog",
-          href: "/dashboard/purchase/catalog",
-        },
-        {
-          title: "Categories",
-          href: "/dashboard/purchase/categories",
-        },
-        {
-          title: "Suppliers",
-          href: "/dashboard/purchase/suppliers",
-        },
+        { title: "Customers", href: "/dashboard/partners/customers" },
+        { title: "Suppliers", href: "/dashboard/partners/suppliers" },
+        { title: "Carriers", href: "/dashboard/partners/carriers" },
       ],
     },
     {
       title: "Reports",
-      icon: <IconlyDocument size={20} />,
+      icon: <IconlyPaper size={20} />,
       items: [
-        {
-          title: "Financial Reports",
-        },
-        {
-          title: "Sales Report",
-        },
+        { title: "Inventory Report", href: "/dashboard/reports/inventory" },
+        { title: "Shipping Report", href: "/dashboard/reports/shipping" },
       ],
     },
   ];
 
   const filteredSidebarItems = sidebarItems
     .map((item) => {
-      const itemPermission = item.href ? navPermissionByHref[item.href] : undefined;
+      const itemPermission = item.href
+        ? navPermissionByHref[item.href]
+        : undefined;
       const sectionPermissions = navPermissionByTitle[item.title];
       const filteredSubItems = item.items?.filter((subItem) => {
         const subPermission = subItem.href

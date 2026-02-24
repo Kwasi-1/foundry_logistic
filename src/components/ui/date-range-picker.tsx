@@ -1,6 +1,6 @@
-import * as React from "react"
-import { useMemo } from "react"
-import * as Popover from "@radix-ui/react-popover"
+﻿import * as React from "react";
+import { useMemo } from "react";
+import * as Popover from "@radix-ui/react-popover";
 import {
   addDays,
   addMonths,
@@ -15,33 +15,33 @@ import {
   startOfDay,
   startOfMonth,
   startOfWeek,
-} from "date-fns"
-import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react"
+} from "date-fns";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "./button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-export type DateRangeMode = "single" | "range"
+export type DateRangeMode = "single" | "range";
 
 export interface DateRangeValue {
-  startDate: Date
-  endDate: Date
+  startDate: Date;
+  endDate: Date;
 }
 
 type QuickSelection = {
-  label: string
-  description: string
-  getValue: () => DateRangeValue
-}
+  label: string;
+  description: string;
+  getValue: () => DateRangeValue;
+};
 
 interface DateRangePickerProps {
-  mode?: DateRangeMode
-  value?: DateRangeValue
-  onChange?: (value: DateRangeValue) => void
-  className?: string
-  label?: string
-  labelPlacement?: "inside" | "outside"
-  placeholder?: string
+  mode?: DateRangeMode;
+  value?: DateRangeValue;
+  onChange?: (value: DateRangeValue) => void;
+  className?: string;
+  label?: string;
+  labelPlacement?: "inside" | "outside";
+  placeholder?: string;
 }
 
 // Quick selections for range mode
@@ -50,86 +50,86 @@ const rangeModeSelections: QuickSelection[] = [
     label: "Today",
     description: "Current day start to end",
     getValue: () => {
-      const today = new Date()
+      const today = new Date();
       return {
         startDate: startOfDay(today),
         endDate: endOfDay(today),
-      }
+      };
     },
   },
   {
     label: "Yesterday",
     description: "Previous day start to end",
     getValue: () => {
-      const yesterday = addDays(new Date(), -1)
+      const yesterday = addDays(new Date(), -1);
       return {
         startDate: startOfDay(yesterday),
         endDate: endOfDay(yesterday),
-      }
+      };
     },
   },
   {
     label: "Last 7 days",
     description: "7 days ago to today",
     getValue: () => {
-      const today = new Date()
-      const sevenDaysAgo = addDays(today, -6)
+      const today = new Date();
+      const sevenDaysAgo = addDays(today, -6);
       return {
         startDate: startOfDay(sevenDaysAgo),
         endDate: endOfDay(today),
-      }
+      };
     },
   },
   {
     label: "Last 30 days",
     description: "30 days ago to today",
     getValue: () => {
-      const today = new Date()
-      const thirtyDaysAgo = addDays(today, -29)
+      const today = new Date();
+      const thirtyDaysAgo = addDays(today, -29);
       return {
         startDate: startOfDay(thirtyDaysAgo),
         endDate: endOfDay(today),
-      }
+      };
     },
   },
   {
     label: "This month",
     description: "First day of month to today",
     getValue: () => {
-      const today = new Date()
-      const firstDay = startOfMonth(today)
+      const today = new Date();
+      const firstDay = startOfMonth(today);
       return {
         startDate: startOfDay(firstDay),
         endDate: endOfDay(today),
-      }
+      };
     },
   },
-]
+];
 
 function formatDisplay(date: Date | null) {
   if (!date) {
-    return "—"
+    return "â€”";
   }
 
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
-  })
+  });
 }
 
 function buildCalendarDays(month: Date) {
-  const start = startOfWeek(startOfMonth(month))
-  const end = endOfWeek(endOfMonth(month))
-  const days: Date[] = []
-  let cursor = start
+  const start = startOfWeek(startOfMonth(month));
+  const end = endOfWeek(endOfMonth(month));
+  const days: Date[] = [];
+  let cursor = start;
 
   while (cursor <= end) {
-    days.push(cursor)
-    cursor = addDays(cursor, 1)
+    days.push(cursor);
+    cursor = addDays(cursor, 1);
   }
 
-  return days
+  return days;
 }
 
 export function DateRangePicker({
@@ -141,32 +141,33 @@ export function DateRangePicker({
   labelPlacement = "inside",
   placeholder,
 }: DateRangePickerProps) {
-  const [selectedRange, setSelectedRange] = React.useState<DateRangeValue | null>(value ?? null)
-  const [tempStartDate, setTempStartDate] = React.useState<Date | null>(null)
+  const [selectedRange, setSelectedRange] =
+    React.useState<DateRangeValue | null>(value ?? null);
+  const [tempStartDate, setTempStartDate] = React.useState<Date | null>(null);
   const [visibleMonth, setVisibleMonth] = React.useState(() => {
     if (value?.startDate) {
-      return startOfMonth(value.startDate)
+      return startOfMonth(value.startDate);
     }
-    return startOfMonth(new Date())
-  })
+    return startOfMonth(new Date());
+  });
 
   // Sync selected range with value prop
   React.useEffect(() => {
     if (value) {
-      setSelectedRange(value)
+      setSelectedRange(value);
     }
-  }, [value])
+  }, [value]);
 
-  const currentMode = mode ?? "range"
-  const quickSelections = currentMode === "range" ? rangeModeSelections : []
+  const currentMode = mode ?? "range";
+  const quickSelections = currentMode === "range" ? rangeModeSelections : [];
 
   const emitChange = React.useCallback(
     (newValue: DateRangeValue) => {
-      setSelectedRange(newValue)
-      onChange?.(newValue)
+      setSelectedRange(newValue);
+      onChange?.(newValue);
     },
-    [onChange]
-  )
+    [onChange],
+  );
 
   const handleDayClick = (day: Date) => {
     if (currentMode === "single") {
@@ -174,64 +175,75 @@ export function DateRangePicker({
       const newValue: DateRangeValue = {
         startDate: startOfDay(day),
         endDate: endOfDay(day),
-      }
-      emitChange(newValue)
-      setVisibleMonth(startOfMonth(day))
-      setTempStartDate(null)
-      return
+      };
+      emitChange(newValue);
+      setVisibleMonth(startOfMonth(day));
+      setTempStartDate(null);
+      return;
     }
 
     // Range mode: Handle range selection
     if (!tempStartDate) {
       // First click: Set start date
-      setTempStartDate(day)
-      return
+      setTempStartDate(day);
+      return;
     }
 
     // Second click: Complete the range
-    const start = isBefore(day, tempStartDate) ? day : tempStartDate
-    const end = isBefore(day, tempStartDate) ? tempStartDate : day
+    const start = isBefore(day, tempStartDate) ? day : tempStartDate;
+    const end = isBefore(day, tempStartDate) ? tempStartDate : day;
 
     const newValue: DateRangeValue = {
       startDate: startOfDay(start),
       endDate: endOfDay(end),
-    }
-    emitChange(newValue)
-    setTempStartDate(null)
-  }
+    };
+    emitChange(newValue);
+    setTempStartDate(null);
+  };
 
   const handleQuickSelection = (selection: QuickSelection) => {
-    const newValue = selection.getValue()
-    emitChange(newValue)
-    setVisibleMonth(startOfMonth(newValue.startDate))
-    setTempStartDate(null)
-  }
+    const newValue = selection.getValue();
+    emitChange(newValue);
+    setVisibleMonth(startOfMonth(newValue.startDate));
+    setTempStartDate(null);
+  };
 
-  const calendarDays = useMemo(() => buildCalendarDays(visibleMonth), [visibleMonth])
+  const calendarDays = useMemo(
+    () => buildCalendarDays(visibleMonth),
+    [visibleMonth],
+  );
   const weekdayLabels = useMemo(() => {
-    const start = startOfWeek(new Date())
+    const start = startOfWeek(new Date());
     return Array.from({ length: 7 }, (_, idx) =>
       format(addDays(start, idx), "EEE"),
-    )
-  }, [])
+    );
+  }, []);
 
-  const hasValue = Boolean(selectedRange?.startDate && selectedRange?.endDate)
+  const hasValue = Boolean(selectedRange?.startDate && selectedRange?.endDate);
 
   const displayValue = hasValue
     ? currentMode === "single"
       ? formatDisplay(selectedRange!.startDate)
-      : `${formatDisplay(selectedRange!.startDate)} → ${formatDisplay(selectedRange!.endDate)}`
-    : "No date selected"
+      : `${formatDisplay(selectedRange!.startDate)} â†’ ${formatDisplay(selectedRange!.endDate)}`
+    : "No date selected";
 
-  const inputLabel = label ?? (currentMode === "single" ? "Single date" : "Date range")
-  const finalPlaceholder = placeholder ?? (currentMode === "single" ? "Select a date" : "Select a date range")
-  const showInsideLabel = labelPlacement !== "outside"
+  const inputLabel =
+    label ?? (currentMode === "single" ? "Single date" : "Date range");
+  const finalPlaceholder =
+    placeholder ??
+    (currentMode === "single" ? "Select a date" : "Select a date range");
+  const showInsideLabel = labelPlacement !== "outside";
 
   return (
     <Popover.Root>
       <div className={cn("flex w-full flex-col", className)}>
         {labelPlacement === "outside" && inputLabel && (
-          <p className="mb-2 text-sm font-medium text-gray-900" style={{ letterSpacing: '-0.8px' }}>{inputLabel}</p>
+          <p
+            className="mb-2 text-sm font-medium text-gray-900"
+            style={{ letterSpacing: "-0.8px" }}
+          >
+            {inputLabel}
+          </p>
         )}
         <Popover.Trigger asChild>
           <button
@@ -240,7 +252,10 @@ export function DateRangePicker({
           >
             {showInsideLabel ? (
               <div className="flex-1 text-left">
-                <p className="text-xs uppercase text-muted-foreground" style={{ letterSpacing: '-0.8px' }}>
+                <p
+                  className="text-xs uppercase text-muted-foreground"
+                  style={{ letterSpacing: "-0.8px" }}
+                >
                   {inputLabel}
                 </p>
                 <p
@@ -273,7 +288,9 @@ export function DateRangePicker({
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-semibold text-gray-900">Select dates</p>
+                <p className="text-sm font-semibold text-gray-900">
+                  Select dates
+                </p>
                 <p className="text-xs text-muted-foreground">
                   Select {currentMode === "single" ? "a date" : "a date range"}.
                 </p>
@@ -289,8 +306,12 @@ export function DateRangePicker({
                 weekdayLabels={weekdayLabels}
                 visibleMonth={visibleMonth}
                 onDayClick={handleDayClick}
-                onPrevMonth={() => setVisibleMonth((prev) => addMonths(prev, -1))}
-                onNextMonth={() => setVisibleMonth((prev) => addMonths(prev, 1))}
+                onPrevMonth={() =>
+                  setVisibleMonth((prev) => addMonths(prev, -1))
+                }
+                onNextMonth={() =>
+                  setVisibleMonth((prev) => addMonths(prev, 1))
+                }
                 mode={currentMode}
                 selectedRange={selectedRange}
                 tempStartDate={tempStartDate}
@@ -320,7 +341,8 @@ export function DateRangePicker({
                 <p className="font-medium text-gray-900">{displayValue}</p>
                 {!hasValue && (
                   <p className="text-xs text-muted-foreground">
-                    Pick a {currentMode === "single" ? "date" : "start date"} to begin.
+                    Pick a {currentMode === "single" ? "date" : "start date"} to
+                    begin.
                   </p>
                 )}
                 {currentMode === "range" && tempStartDate && (
@@ -339,7 +361,7 @@ export function DateRangePicker({
         </Popover.Portal>
       </div>
     </Popover.Root>
-  )
+  );
 }
 
 function CalendarGrid({
@@ -353,21 +375,22 @@ function CalendarGrid({
   selectedRange,
   tempStartDate,
 }: {
-  days: Date[]
-  weekdayLabels: string[]
-  visibleMonth: Date
-  onPrevMonth: () => void
-  onNextMonth: () => void
-  onDayClick: (day: Date) => void
-  mode: DateRangeMode
-  selectedRange: DateRangeValue | null
-  tempStartDate: Date | null
+  days: Date[];
+  weekdayLabels: string[];
+  visibleMonth: Date;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
+  onDayClick: (day: Date) => void;
+  mode: DateRangeMode;
+  selectedRange: DateRangeValue | null;
+  tempStartDate: Date | null;
 }) {
   const getDayState = (day: Date) => {
-    const inCurrentMonth = isSameMonth(day, visibleMonth)
+    const inCurrentMonth = isSameMonth(day, visibleMonth);
 
     if (mode === "single") {
-      const isSingleSelected = selectedRange && isSameDay(day, selectedRange.startDate)
+      const isSingleSelected =
+        selectedRange && isSameDay(day, selectedRange.startDate);
       return {
         inCurrentMonth,
         isSelected: isSingleSelected,
@@ -375,17 +398,18 @@ function CalendarGrid({
         isRangeEnd: false,
         isBetween: false,
         isTempStart: false,
-      }
+      };
     }
 
     // Range mode
-    const isTempStart = tempStartDate && isSameDay(day, tempStartDate)
-    const isRangeStart = selectedRange && isSameDay(day, selectedRange.startDate)
-    const isRangeEnd = selectedRange && isSameDay(day, selectedRange.endDate)
+    const isTempStart = tempStartDate && isSameDay(day, tempStartDate);
+    const isRangeStart =
+      selectedRange && isSameDay(day, selectedRange.startDate);
+    const isRangeEnd = selectedRange && isSameDay(day, selectedRange.endDate);
     const isBetween =
       selectedRange &&
       isAfter(day, selectedRange.startDate) &&
-      isBefore(day, selectedRange.endDate)
+      isBefore(day, selectedRange.endDate);
 
     return {
       inCurrentMonth,
@@ -394,8 +418,8 @@ function CalendarGrid({
       isRangeEnd: isRangeEnd,
       isBetween: isBetween,
       isTempStart: isTempStart,
-    }
-  }
+    };
+  };
 
   return (
     <div className="bg-muted/20">
@@ -421,8 +445,8 @@ function CalendarGrid({
 
       <div className="grid grid-cols-7 gap-1 p-3 text-sm">
         {days.map((day) => {
-          const state = getDayState(day)
-          const isDisabled = false
+          const state = getDayState(day);
+          const isDisabled = false;
 
           return (
             <button
@@ -433,17 +457,21 @@ function CalendarGrid({
               className={cn(
                 "flex h-10 w-10 items-center justify-center text-sm transition rounded-md",
                 !state.inCurrentMonth && "text-muted-foreground/50",
-                state.isSelected && "bg-primary text-primary-foreground font-semibold",
+                state.isSelected &&
+                  "bg-primary text-primary-foreground font-semibold",
                 state.isBetween && "bg-primary/10 text-primary",
                 state.isTempStart && "bg-primary/30 text-primary font-semibold",
-                !state.isSelected && !state.isBetween && !state.isTempStart && "hover:bg-muted/60",
+                !state.isSelected &&
+                  !state.isBetween &&
+                  !state.isTempStart &&
+                  "hover:bg-muted/60",
               )}
             >
               {format(day, "d")}
             </button>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }

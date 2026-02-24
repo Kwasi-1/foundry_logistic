@@ -1,8 +1,8 @@
-import * as React from "react";
+﻿import * as React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown, ChevronRight, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "./badge";
+import { Badge } from "@/components/ui/badge";
 
 export interface SidebarNavItem {
   title: string;

@@ -1,4 +1,4 @@
-import { onLogout } from "@/store/auth/auth.slice";
+﻿import { onLogout } from "@/store/features/auth.slice";
 import { useAppDispatch } from "@/store/store";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useRef } from "react";
@@ -32,3 +32,4 @@ const useAutoLogout = (timeoutMinutes = 10) => {
 };
 
 export default useAutoLogout;
+

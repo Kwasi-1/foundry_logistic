@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import { useMemo } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import {
@@ -17,8 +17,8 @@ import {
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
-import { Button } from "./button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 
 export type DateSelectorMode = "single" | "range";
 
@@ -108,7 +108,7 @@ const defaultPresets: Preset[] = [
 
 function formatDisplay(value: string | null) {
   if (!value) {
-    return "—";
+    return "â€”";
   }
 
   const date = new Date(value);
@@ -256,7 +256,7 @@ export function DateSelector({
       ? singleDate
         ? formatDisplay(singleDate)
         : "No date selected"
-      : `${formatDisplay(rangeDates.startDate)} → ${formatDisplay(rangeDates.endDate)}`;
+      : `${formatDisplay(rangeDates.startDate)} â†’ ${formatDisplay(rangeDates.endDate)}`;
 
   const inputLabel =
     label ?? (mode === "single" ? "Single date" : "Date range");
@@ -264,8 +264,7 @@ export function DateSelector({
     placeholder ??
     (mode === "single" ? "Select a date" : "Select a date range");
   const effectiveHideLabel = hideLabel ?? variant === "compact";
-  const showInsideLabel =
-    labelPlacement !== "outside" && !effectiveHideLabel;
+  const showInsideLabel = labelPlacement !== "outside" && !effectiveHideLabel;
   const triggerSizeClasses =
     variant === "compact" ? "min-h-10 py-1" : "min-h-[2.5rem] py-2";
 
@@ -273,7 +272,12 @@ export function DateSelector({
     <Popover.Root>
       <div className={cn("flex w-full flex-col", className)}>
         {labelPlacement === "outside" && !effectiveHideLabel && inputLabel && (
-          <p className="mb-2 text-sm font-medium text-gray-900" style={{ letterSpacing: '-0.8px' }}>{inputLabel}</p>
+          <p
+            className="mb-2 text-sm font-medium text-gray-900"
+            style={{ letterSpacing: "-0.8px" }}
+          >
+            {inputLabel}
+          </p>
         )}
         <Popover.Trigger asChild>
           <button
@@ -286,7 +290,10 @@ export function DateSelector({
           >
             {showInsideLabel ? (
               <div className="flex-1 text-left">
-                <p className="text-xs uppercase text-muted-foreground" style={{ letterSpacing: '-0.8px' }}>
+                <p
+                  className="text-xs uppercase text-muted-foreground"
+                  style={{ letterSpacing: "-0.8px" }}
+                >
                   {inputLabel}
                 </p>
                 <p
@@ -352,55 +359,55 @@ export function DateSelector({
                       weekdayLabels={weekdayLabels}
                       visibleMonth={visibleMonth}
                       onDayClick={handleDayClick}
-                  onPrevMonth={() =>
-                    setVisibleMonth((prev) => addMonths(prev, -1))
-                  }
-                  onNextMonth={() =>
-                    setVisibleMonth((prev) => addMonths(prev, 1))
-                  }
-                  mode="single"
-                  singleDate={singleDate}
-                  rangeDates={rangeDates}
-                  minDate={minDateObj}
-                />
-              </TabsContent>
-              <TabsContent value="range" className="pt-4">
-                <CalendarGrid
-                  days={calendarDays}
-                  weekdayLabels={weekdayLabels}
+                      onPrevMonth={() =>
+                        setVisibleMonth((prev) => addMonths(prev, -1))
+                      }
+                      onNextMonth={() =>
+                        setVisibleMonth((prev) => addMonths(prev, 1))
+                      }
+                      mode="single"
+                      singleDate={singleDate}
+                      rangeDates={rangeDates}
+                      minDate={minDateObj}
+                    />
+                  </TabsContent>
+                  <TabsContent value="range" className="pt-4">
+                    <CalendarGrid
+                      days={calendarDays}
+                      weekdayLabels={weekdayLabels}
                       visibleMonth={visibleMonth}
                       onDayClick={handleDayClick}
                       onPrevMonth={() =>
                         setVisibleMonth((prev) => addMonths(prev, -1))
                       }
-                  onNextMonth={() =>
-                    setVisibleMonth((prev) => addMonths(prev, 1))
-                  }
-                  mode="range"
-                  singleDate={singleDate}
-                  rangeDates={rangeDates}
-                  minDate={minDateObj}
-                />
-              </TabsContent>
-            </Tabs>
-          ) : (
-            <CalendarGrid
-              days={calendarDays}
-              weekdayLabels={weekdayLabels}
+                      onNextMonth={() =>
+                        setVisibleMonth((prev) => addMonths(prev, 1))
+                      }
+                      mode="range"
+                      singleDate={singleDate}
+                      rangeDates={rangeDates}
+                      minDate={minDateObj}
+                    />
+                  </TabsContent>
+                </Tabs>
+              ) : (
+                <CalendarGrid
+                  days={calendarDays}
+                  weekdayLabels={weekdayLabels}
                   visibleMonth={visibleMonth}
                   onDayClick={handleDayClick}
                   onPrevMonth={() =>
                     setVisibleMonth((prev) => addMonths(prev, -1))
                   }
-              onNextMonth={() =>
-                setVisibleMonth((prev) => addMonths(prev, 1))
-              }
-              mode={mode}
-              singleDate={singleDate}
-              rangeDates={rangeDates}
-              minDate={minDateObj}
-            />
-          )}
+                  onNextMonth={() =>
+                    setVisibleMonth((prev) => addMonths(prev, 1))
+                  }
+                  mode={mode}
+                  singleDate={singleDate}
+                  rangeDates={rangeDates}
+                  minDate={minDateObj}
+                />
+              )}
 
               {/*<div>
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">

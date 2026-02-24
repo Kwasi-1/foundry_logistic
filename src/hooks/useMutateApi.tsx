@@ -1,5 +1,5 @@
-import { mutateFn } from '@/services/mutation.api';
-import { useMutation } from 'react-query';
+import { mutateFn } from "@/services/mutation.api";
+import { useMutation } from "@tanstack/react-query";
 
 type IUseMutateApi = Partial<{
   url: any;
@@ -17,8 +17,8 @@ const useMutateApi = ({
   onError,
   url,
   header,
-  method = 'POST',
-  alt = false
+  method = "POST",
+  alt = false,
 }: IUseMutateApi) => {
   return useMutation({
     mutationKey: key,
@@ -30,7 +30,7 @@ const useMutateApi = ({
         method,
       });
 
-      if ([header?.responseType].includes('blob') || alt) {
+      if ([header?.responseType].includes("blob") || alt) {
         return data;
       } else {
         return data?.data;
@@ -42,6 +42,5 @@ const useMutateApi = ({
     },
   });
 };
-
 
 export default useMutateApi;

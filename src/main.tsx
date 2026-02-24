@@ -1,15 +1,15 @@
-import React from "react";
+﻿import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import "./index.css";
-import { MoneyMaskProvider } from "./hooks/use-money-mask";
-import { Toaster } from "./components/ui/toaster";
+import "@/styles/index.css";
+import { MoneyMaskProvider } from "@/hooks/use-money-mask";
+import { Toaster } from "@/components/ui/toaster";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { variables } from "./utils/env";
+import { variables } from "@/utils/env";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import store, { persistedStore } from "./store/store";
-import App from ".";
+import store, { persistedStore } from "@/store/store";
+import App from "@/index";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -27,7 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               }}
             >
               <App />
-              <Toaster  />
+              <Toaster />
             </Auth0Provider>
           </MoneyMaskProvider>
         </BrowserRouter>

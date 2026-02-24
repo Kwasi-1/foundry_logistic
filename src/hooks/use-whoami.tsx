@@ -1,6 +1,6 @@
-import { apiClient } from "@/lib/api";
+﻿import { apiClient } from "@/lib/api";
 import { useAppDispatch } from "@/store/store";
-import { onUpdateUserSlice } from "@/store/whoami/user.slice";
+import { onUpdateUserSlice } from "@/store/features/user.slice";
 import { variables } from "@/utils/env";
 import { useQuery } from "@tanstack/react-query";
 
@@ -21,3 +21,4 @@ function useWhoami() {
 }
 
 export default useWhoami;
+

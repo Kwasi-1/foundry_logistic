@@ -1,56 +1,55 @@
-import * as React from "react"
-import { ChevronDown } from "lucide-react"
+﻿import * as React from "react";
+import { ChevronDown } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "./button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 function formatDigits(value: string) {
-  const digits = value.replace(/\D/g, "").slice(0, 15)
-  if (digits.length <= 3) return digits
-  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`
+  const digits = value.replace(/\D/g, "").slice(0, 15);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
   if (digits.length <= 10)
-    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(
     6,
     10,
-  )} ${digits.slice(10)}`
+  )} ${digits.slice(10)}`;
 }
 
 type CountryOption = {
-  value: string
-  label: string
-  emoji?: string
-}
+  value: string;
+  label: string;
+  emoji?: string;
+};
 
 const defaultCountries: CountryOption[] = [
-  { value: "+1", label: "United States", emoji: "🇺🇸" },
-  { value: "+44", label: "United Kingdom", emoji: "🇬🇧" },
-  { value: "+233", label: "Ghana", emoji: "🇬🇭" },
-  { value: "+234", label: "Nigeria", emoji: "🇳🇬" },
-  { value: "+61", label: "Australia", emoji: "🇦🇺" },
-]
+  { value: "+1", label: "United States", emoji: "ðŸ‡ºðŸ‡¸" },
+  { value: "+44", label: "United Kingdom", emoji: "ðŸ‡¬ðŸ‡§" },
+  { value: "+233", label: "Ghana", emoji: "ðŸ‡¬ðŸ‡­" },
+  { value: "+234", label: "Nigeria", emoji: "ðŸ‡³ðŸ‡¬" },
+  { value: "+61", label: "Australia", emoji: "ðŸ‡¦ðŸ‡º" },
+];
 
-export interface PhoneInputProps
-  extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    "value" | "defaultValue" | "onChange"
-  > {
-  value?: string
-  defaultValue?: string
-  onValueChange?: (value: string) => void
-  label?: string
-  labelPlacement?: "inside" | "outside"
-  error?: string
-  countryCode?: string
-  defaultCountryCode?: string
-  onCountryChange?: (value: string) => void
-  countryOptions?: CountryOption[]
+export interface PhoneInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "value" | "defaultValue" | "onChange"
+> {
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  label?: string;
+  labelPlacement?: "inside" | "outside";
+  error?: string;
+  countryCode?: string;
+  defaultCountryCode?: string;
+  onCountryChange?: (value: string) => void;
+  countryOptions?: CountryOption[];
 }
 
 export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
@@ -72,41 +71,44 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     },
     ref,
   ) => {
-    const controlled = value !== undefined
-    const [internalValue, setInternalValue] = React.useState(defaultValue || "")
+    const controlled = value !== undefined;
+    const [internalValue, setInternalValue] = React.useState(
+      defaultValue || "",
+    );
 
     React.useEffect(() => {
       if (controlled && value !== undefined) {
-        setInternalValue(value.replace(/\D/g, ""))
+        setInternalValue(value.replace(/\D/g, ""));
       }
-    }, [controlled, value])
+    }, [controlled, value]);
 
-    const digits = controlled ? value?.replace(/\D/g, "") ?? "" : internalValue
-    const formatted = formatDigits(digits)
+    const digits = controlled
+      ? (value?.replace(/\D/g, "") ?? "")
+      : internalValue;
+    const formatted = formatDigits(digits);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const nextDigits = event.target.value.replace(/\D/g, "").slice(0, 15)
+      const nextDigits = event.target.value.replace(/\D/g, "").slice(0, 15);
       if (!controlled) {
-        setInternalValue(nextDigits)
+        setInternalValue(nextDigits);
       }
-      onValueChange?.(nextDigits)
-    }
+      onValueChange?.(nextDigits);
+    };
 
-    const controlledCountry = countryCode !== undefined
-    const [internalCountry, setInternalCountry] = React.useState(
-      defaultCountryCode,
-    )
+    const controlledCountry = countryCode !== undefined;
+    const [internalCountry, setInternalCountry] =
+      React.useState(defaultCountryCode);
 
     React.useEffect(() => {
       if (controlledCountry && countryCode !== undefined) {
-        setInternalCountry(countryCode)
+        setInternalCountry(countryCode);
       }
-    }, [controlledCountry, countryCode])
+    }, [controlledCountry, countryCode]);
 
-    const currentCountry = controlledCountry ? countryCode! : internalCountry
+    const currentCountry = controlledCountry ? countryCode! : internalCountry;
     const selectedCountry =
       countryOptions.find((opt) => opt.value === currentCountry) ??
-      countryOptions[0]
+      countryOptions[0];
 
     if (labelPlacement === "inside" && label) {
       return (
@@ -117,7 +119,10 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               error && "border-destructive focus-within:ring-destructive",
             )}
           >
-            <p className="text-xs uppercase text-muted-foreground" style={{ letterSpacing: '-0.8px' }}>
+            <p
+              className="text-xs uppercase text-muted-foreground"
+              style={{ letterSpacing: "-0.8px" }}
+            >
               {label}
             </p>
             <div className="mt-1 flex items-center">
@@ -130,7 +135,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                     className="h-auto gap-1 border-r border-input px-2 py-0 hover:bg-accent/50"
                   >
                     <span className="text-base leading-none">
-                      {selectedCountry?.emoji ?? "🌐"}
+                      {selectedCountry?.emoji ?? "ðŸŒ"}
                     </span>
                     <span className="text-xs font-medium leading-none">
                       {selectedCountry?.value}
@@ -144,9 +149,9 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                       key={option.value}
                       onClick={() => {
                         if (!controlledCountry) {
-                          setInternalCountry(option.value)
+                          setInternalCountry(option.value);
                         }
-                        onCountryChange?.(option.value)
+                        onCountryChange?.(option.value);
                       }}
                       className="flex items-center gap-2"
                     >
@@ -176,13 +181,18 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
           </div>
         </div>
-      )
+      );
     }
 
     return (
       <div className={cn("flex w-full flex-col", className)}>
         {labelPlacement === "outside" && label && (
-          <p className="mb-2 text-sm font-medium text-gray-900" style={{ letterSpacing: '-0.8px' }}>{label}</p>
+          <p
+            className="mb-2 text-sm font-medium text-gray-900"
+            style={{ letterSpacing: "-0.8px" }}
+          >
+            {label}
+          </p>
         )}
         <div
           className={cn(
@@ -202,7 +212,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 )}
               >
                 <span className="text-base leading-none">
-                  {selectedCountry?.emoji ?? "🌐"}
+                  {selectedCountry?.emoji ?? "ðŸŒ"}
                 </span>
                 <span className="text-xs font-medium leading-none">
                   {selectedCountry?.value}
@@ -216,9 +226,9 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                   key={option.value}
                   onClick={() => {
                     if (!controlledCountry) {
-                      setInternalCountry(option.value)
+                      setInternalCountry(option.value);
                     }
-                    onCountryChange?.(option.value)
+                    onCountryChange?.(option.value);
                   }}
                   className="flex items-center gap-2"
                 >
@@ -247,7 +257,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
         </div>
       </div>
-    )
+    );
   },
-)
-PhoneInput.displayName = "PhoneInput"
+);
+PhoneInput.displayName = "PhoneInput";

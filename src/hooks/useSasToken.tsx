@@ -1,4 +1,4 @@
-import useQueryApi from './useQueryApi';
+﻿import useQueryApi from '@/hooks/useQueryApi';
 import { variables } from '@/utils/env';
 
 const useSasToken = () => {
@@ -9,3 +9,5 @@ const useSasToken = () => {
 };
 
 export default useSasToken;
+
+

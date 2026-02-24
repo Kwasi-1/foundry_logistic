@@ -1,22 +1,22 @@
-import * as React from "react"
+﻿import * as React from "react";
 
-import { cn } from "@/lib/utils"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs"
+import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export interface DetailTabsItem {
-  id: string
-  label: string
+  id: string;
+  label: string;
   fields: Array<{
-    title: string
-    value: React.ReactNode
-  }>
+    title: string;
+    value: React.ReactNode;
+  }>;
 }
 
 interface DetailTabsProps {
-  items: DetailTabsItem[]
-  className?: string
-  defaultValue?: string
-  orientation?: "horizontal" | "vertical"
+  items: DetailTabsItem[];
+  className?: string;
+  defaultValue?: string;
+  orientation?: "horizontal" | "vertical";
 }
 
 export function DetailTabs({
@@ -25,7 +25,7 @@ export function DetailTabs({
   defaultValue,
   orientation = "horizontal",
 }: DetailTabsProps) {
-  const initialValue = defaultValue ?? items[0]?.id
+  const initialValue = defaultValue ?? items[0]?.id;
 
   return (
     <Tabs defaultValue={initialValue} className={cn("w-full", className)}>
@@ -33,7 +33,7 @@ export function DetailTabs({
         variant="top"
         className={cn(
           "mb-4",
-          orientation === "vertical" && "mb-0 flex-col border-l border-t-0"
+          orientation === "vertical" && "mb-0 flex-col border-l border-t-0",
         )}
       >
         {items.map((item) => (
@@ -42,7 +42,8 @@ export function DetailTabs({
             variant="top"
             value={item.id}
             className={cn(
-              orientation === "vertical" && "justify-start border-b-0 border-l-2 px-3 py-2"
+              orientation === "vertical" &&
+                "justify-start border-b-0 border-l-2 px-3 py-2",
             )}
           >
             {item.label}
@@ -55,22 +56,28 @@ export function DetailTabs({
           <dl className="grid gap-4 md:grid-cols-2">
             {item.fields.map((field) => {
               const isPlain =
-                typeof field.value === "string" || typeof field.value === "number"
+                typeof field.value === "string" ||
+                typeof field.value === "number";
 
               return (
                 <div key={field.title} className="space-y-1">
                   <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">
                     {field.title}
                   </dt>
-                  <dd className={cn("text-sm text-gray-900", isPlain && "font-semibold")}>
+                  <dd
+                    className={cn(
+                      "text-sm text-gray-900",
+                      isPlain && "font-semibold",
+                    )}
+                  >
                     {field.value}
                   </dd>
                 </div>
-              )
+              );
             })}
           </dl>
         </TabsContent>
       ))}
     </Tabs>
-  )
+  );
 }

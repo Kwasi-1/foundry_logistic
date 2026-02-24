@@ -1,31 +1,35 @@
-import { queryFn } from '@/services/query.api';
-import { onUpdateAuthSlice } from '@/store/features/auth.slice';
-import { RootState } from '@/store/store';
-import { variables } from '@/utils/env';
-import { useQuery } from 'react-query';
-import { useDispatch, useSelector } from 'react-redux';
-import default_permissions from '../../permissions.defaults.json';
+import { queryFn } from "@/services/query.api";
+import { onUpdateAuthSlice } from "@/store/features/auth.slice";
+import { RootState } from "@/store/store";
+import { variables } from "@/utils/env";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+import default_permissions from "@/permissions.defaults.json";
+import { useEffect } from "react";
 
 const useOrganization = () => {
   const { organization } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const query = useQuery({
-    queryKey: ['organization', 'fields', organization?.id],
+    queryKey: ["organization", "fields", organization?.id],
     queryFn: () =>
       queryFn({
-        url: variables('organization').BASE_URL + '/organization',
+        url: variables("organization").BASE_URL + "/organization",
         params: { id: organization?.id },
       }),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: !!organization?.id,
-    onSuccess(data: any) {
-      const permissions = data?.data?.permissions || default_permissions;
-
-      dispatch(onUpdateAuthSlice({ permissions }));
-    },
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    if (query.isSuccess && query.data) {
+      const data: any = query.data;
+      const permissions = data?.data?.permissions || default_permissions;
+      dispatch(onUpdateAuthSlice({ permissions }));
+    }
+  }, [query.isSuccess, query.data, dispatch]);
 
   const data = (query.data as any)?.data as IOrganization;
   return {
@@ -76,19 +80,19 @@ export interface Field {
 }
 
 export enum Apply {
-  Employed = 'Employed',
-  SelfEmployed = 'Self Employed',
-  Student = 'Student',
+  Employed = "Employed",
+  SelfEmployed = "Self Employed",
+  Student = "Student",
 }
 
 export enum DataType {
-  Select = 'select',
-  Text = 'text',
+  Select = "select",
+  Text = "text",
 }
 
 export enum DependentOn {
-  EmploymentType = 'employmentType',
-  Empty = '',
+  EmploymentType = "employmentType",
+  Empty = "",
 }
 
 // export interface IPermissions {
@@ -100,38 +104,38 @@ export enum DependentOn {
 //     organization: IAccess;
 //   };
 // }
-export type IPermissions = typeof default_permissions
+export type IPermissions = typeof default_permissions;
 
 export interface IAccess {
-  'update:application': ActionApplication;
-  'approve_or_reject:application': ActionApplication;
-  'delete:application': ActionApplication;
-  'export:application': ActionApplication;
-  'delete:approval': ActionApplication;
-  'action:repayment': ActionApplication;
-  'disburse:loan': ActionApplication;
-  'create:loan': ActionApplication;
-  'book:loan': ActionApplication;
-  'close:loan': ActionApplication;
-  'export:loans': ActionApplication;
-  'export:investment.or.account': ActionApplication;
-  'export:repayment.statement': ActionApplication;
-  'view:application': ActionApplication;
-  'view:application.details': ActionApplication;
-  'view:pending.disbursement': ActionApplication;
-  'view:disbursed.loans': ActionApplication;
-  'view:closed.loans': ActionApplication;
-  'view:booked.loans': ActionApplication;
-  'view:repayments': ActionApplication;
-  'create:users': ActionApplication;
-  'update:users': ActionApplication;
-  'delete:users': ActionApplication;
-  'create:workflow': ActionApplication;
-  'update:workflow': ActionApplication;
-  'delete:workflow': ActionApplication;
-  'create:branch': ActionApplication;
-  'update:branch': ActionApplication;
-  'delete:branch': ActionApplication;
+  "update:application": ActionApplication;
+  "approve_or_reject:application": ActionApplication;
+  "delete:application": ActionApplication;
+  "export:application": ActionApplication;
+  "delete:approval": ActionApplication;
+  "action:repayment": ActionApplication;
+  "disburse:loan": ActionApplication;
+  "create:loan": ActionApplication;
+  "book:loan": ActionApplication;
+  "close:loan": ActionApplication;
+  "export:loans": ActionApplication;
+  "export:investment.or.account": ActionApplication;
+  "export:repayment.statement": ActionApplication;
+  "view:application": ActionApplication;
+  "view:application.details": ActionApplication;
+  "view:pending.disbursement": ActionApplication;
+  "view:disbursed.loans": ActionApplication;
+  "view:closed.loans": ActionApplication;
+  "view:booked.loans": ActionApplication;
+  "view:repayments": ActionApplication;
+  "create:users": ActionApplication;
+  "update:users": ActionApplication;
+  "delete:users": ActionApplication;
+  "create:workflow": ActionApplication;
+  "update:workflow": ActionApplication;
+  "delete:workflow": ActionApplication;
+  "create:branch": ActionApplication;
+  "update:branch": ActionApplication;
+  "delete:branch": ActionApplication;
 }
 
 export interface ActionApplication {

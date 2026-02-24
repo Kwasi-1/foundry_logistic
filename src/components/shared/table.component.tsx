@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
   getKeyValue,
@@ -10,8 +10,8 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import React, { Key, useMemo, useState } from "react";
-import LogoComponent from "./logo.component";
-import Pagination from "./pagination";
+import LogoComponent from "@/components/shared/logo.component";
+import Pagination from "@/components/shared/pagination";
 import useScreenSize from "@/hooks/useScreenSize";
 import { isEmpty, isEqual } from "lodash";
 
@@ -391,3 +391,5 @@ const CustomTableComponent: React.FC<ICustomTableComponent> = ({
 };
 
 export default CustomTableComponent;
+
+

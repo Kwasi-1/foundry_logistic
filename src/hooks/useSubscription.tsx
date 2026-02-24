@@ -1,17 +1,18 @@
-import { mutateFn } from '@/services/mutation.api';
-import { onUpdateAuthSlice } from '@/store/features/auth.slice';
-import { RootState } from '@/store/store';
-import { variables } from '@/utils/env';
-import { lowerCase } from 'lodash';
-import { useQuery } from 'react-query';
-import { useDispatch, useSelector } from 'react-redux';
+import { mutateFn } from "@/services/mutation.api";
+import { onUpdateAuthSlice } from "@/store/features/auth.slice";
+import { RootState } from "@/store/store";
+import { variables } from "@/utils/env";
+import { lowerCase } from "lodash";
+import { useQuery } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const useSubscription = () => {
   const dispatch = useDispatch();
   const { organization } = useSelector((state: RootState) => state.auth);
 
-  return useQuery<{ data: ISubscription }>({
-    queryKey: ['get', 'subscription', organization?.name],
+  const query = useQuery<{ data: ISubscription }>({
+    queryKey: ["get", "subscription", organization?.name],
     queryFn: () =>
       mutateFn({
         url: variables().SUB_SERVICE + `/subscriptions/search`,
@@ -19,21 +20,30 @@ const useSubscription = () => {
           organization_id: organization?.name,
         },
       }),
-    onSuccess(data: any) {
-      const subscription: ISubscription = data?.data || {};
-
-      const is_active =
-        lowerCase(subscription.subscription_status) === 'active';
-      dispatch(onUpdateAuthSlice({ isSubscribed: is_active }));
-    },
-    onError(err) {
-      console.log(err);
-      dispatch(onUpdateAuthSlice({ isSubscribed: false }));
-    },
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: true,
     retry: 1,
   });
+
+  useEffect(() => {
+    if (query.isSuccess && query.data) {
+      const data: any = query.data;
+      const subscription: ISubscription = data?.data || {};
+
+      const is_active =
+        lowerCase(subscription.subscription_status) === "active";
+      dispatch(onUpdateAuthSlice({ isSubscribed: is_active }));
+    }
+  }, [query.isSuccess, query.data, dispatch]);
+
+  useEffect(() => {
+    if (query.isError) {
+      console.log(query.error);
+      dispatch(onUpdateAuthSlice({ isSubscribed: false }));
+    }
+  }, [query.isError, query.error, dispatch]);
+
+  return query;
 };
 
 export default useSubscription;
@@ -66,7 +76,7 @@ export interface App {
   updated_at: Date;
 }
 
-export interface UsageData { }
+export interface UsageData {}
 
 export interface Bundle {
   id: number;

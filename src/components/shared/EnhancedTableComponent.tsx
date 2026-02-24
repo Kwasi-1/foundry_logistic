@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+﻿import React, { useState, useMemo, useCallback } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
   Button,
@@ -11,10 +11,10 @@ import {
 } from "@nextui-org/react";
 import { capitalize } from "lodash";
 import { motion, AnimatePresence } from "framer-motion";
-import CustomContainerComponent from "@/components/custom.container.component";
-import CustomTableComponent from "@/components/table.component";
+import CustomContainerComponent from "@/components/shared/custom.container.component";
+import CustomTableComponent from "@/components/shared/table.component";
 import { Key } from "react";
-import { CustomOnlyDateFilterComponent } from "./shared/custom-only-date-filter";
+import { DateFilter } from "@/components/ui/date-filter";
 
 // Types for the enhanced table
 export interface TableColumn {
@@ -262,7 +262,7 @@ const EnhancedTableComponent: React.FC<EnhancedTableProps> = ({
         onSearchChange(value);
       }
     },
-    [onSearchChange]
+    [onSearchChange],
   );
 
   // Handle filter change
@@ -273,7 +273,7 @@ const EnhancedTableComponent: React.FC<EnhancedTableProps> = ({
         onFilterChange(selection);
       }
     },
-    [onFilterChange]
+    [onFilterChange],
   );
 
   // Handle row click for expansion
@@ -306,7 +306,7 @@ const EnhancedTableComponent: React.FC<EnhancedTableProps> = ({
         setSelectedRow(rowData);
       }
     },
-    [selectedRow, enableRowExpansion, onclick]
+    [selectedRow, enableRowExpansion, onclick],
   );
 
   // Process rows to add actions dropdown if rowActions are provided
@@ -540,7 +540,7 @@ const EnhancedTableComponent: React.FC<EnhancedTableProps> = ({
           )}
           {showDateFilter && (
             <div className="flex justify-items-end">
-              <CustomOnlyDateFilterComponent />
+              <DateFilter />
             </div>
           )}
         </div>
@@ -675,7 +675,7 @@ const EnhancedTableComponent: React.FC<EnhancedTableProps> = ({
               enableRowExpansion
                 ? (key) => {
                     const rowData = processedRows.find(
-                      (row) => (row.id || row.key) === key
+                      (row) => (row.id || row.key) === key,
                     );
                     if (rowData) {
                       handleRowClick(key, rowData, {

@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { onSetPermissions } from "@/store/auth/auth.slice";
+import { onSetPermissions } from "@/store/features/auth.slice";
 import { apiClient } from "@/lib/api";
 import { variables } from "@/utils/env";
 
@@ -54,3 +54,4 @@ export function useRbasPermissions(options: UseRbasPermissionsOptions = {}) {
     retry: false,
   });
 }
+

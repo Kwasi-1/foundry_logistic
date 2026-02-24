@@ -1,4 +1,4 @@
-import * as React from "react"
+﻿import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,32 +12,32 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react"
+} from "@tanstack/react-table";
+import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "./button"
-import { Input } from "./input"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "./dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 interface DataTableWithSelectionProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  searchKey?: string
-  searchPlaceholder?: string
-  enableColumnVisibility?: boolean
-  enablePagination?: boolean
-  pageSize?: number
-  className?: string
-  onRowSelectionChange?: (selectedRows: TData[]) => void
-  rowSelection?: RowSelectionState
-  setRowSelection?: OnChangeFn<RowSelectionState>
-  onRowClick?: (row: TData) => void
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  searchKey?: string;
+  searchPlaceholder?: string;
+  enableColumnVisibility?: boolean;
+  enablePagination?: boolean;
+  pageSize?: number;
+  className?: string;
+  onRowSelectionChange?: (selectedRows: TData[]) => void;
+  rowSelection?: RowSelectionState;
+  setRowSelection?: OnChangeFn<RowSelectionState>;
+  onRowClick?: (row: TData) => void;
 }
 
 export function DataTableWithSelection<TData, TValue>({
@@ -54,26 +54,31 @@ export function DataTableWithSelection<TData, TValue>({
   setRowSelection: controlledSetRowSelection,
   onRowClick,
 }: DataTableWithSelectionProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+    [],
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [internalRowSelection, setInternalRowSelection] = React.useState<RowSelectionState>({})
+    React.useState<VisibilityState>({});
+  const [internalRowSelection, setInternalRowSelection] =
+    React.useState<RowSelectionState>({});
 
-  const rowSelection = controlledRowSelection ?? internalRowSelection
-  const handleRowSelectionChange: OnChangeFn<RowSelectionState> = (updaterOrValue) => {
+  const rowSelection = controlledRowSelection ?? internalRowSelection;
+  const handleRowSelectionChange: OnChangeFn<RowSelectionState> = (
+    updaterOrValue,
+  ) => {
     if (controlledSetRowSelection) {
-      controlledSetRowSelection(updaterOrValue)
-      return
+      controlledSetRowSelection(updaterOrValue);
+      return;
     }
     setInternalRowSelection((prev) =>
       typeof updaterOrValue === "function"
-        ? (updaterOrValue as (old: RowSelectionState) => RowSelectionState)(prev)
-        : updaterOrValue
-    )
-  }
+        ? (updaterOrValue as (old: RowSelectionState) => RowSelectionState)(
+            prev,
+          )
+        : updaterOrValue,
+    );
+  };
 
   const table = useReactTable({
     data,
@@ -100,16 +105,18 @@ export function DataTableWithSelection<TData, TValue>({
         pageSize: pageSize,
       },
     },
-  })
+  });
 
   // Notify parent when row selection changes
   React.useEffect(() => {
     if (onRowSelectionChange) {
-      const selectedRows = table.getFilteredSelectedRowModel().rows.map(row => row.original)
-      console.log("Row selection changed:", selectedRows)
-      onRowSelectionChange(selectedRows)
+      const selectedRows = table
+        .getFilteredSelectedRowModel()
+        .rows.map((row) => row.original);
+      console.log("Row selection changed:", selectedRows);
+      onRowSelectionChange(selectedRows);
     }
-  }, [rowSelection, onRowSelectionChange, table])
+  }, [rowSelection, onRowSelectionChange, table]);
 
   return (
     <div className={cn("w-full space-y-4", className)}>
@@ -151,7 +158,7 @@ export function DataTableWithSelection<TData, TValue>({
                       >
                         {column.id}
                       </DropdownMenuCheckboxItem>
-                    )
+                    );
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -179,10 +186,10 @@ export function DataTableWithSelection<TData, TValue>({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </th>
-                    )
+                    );
                   })}
                 </tr>
               ))}
@@ -203,7 +210,7 @@ export function DataTableWithSelection<TData, TValue>({
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </td>
                     ))}
@@ -237,7 +244,7 @@ export function DataTableWithSelection<TData, TValue>({
               <select
                 value={table.getState().pagination.pageSize}
                 onChange={(e) => {
-                  table.setPageSize(Number(e.target.value))
+                  table.setPageSize(Number(e.target.value));
                 }}
                 className="h-8 w-[70px] border border-input bg-background px-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
               >
@@ -294,5 +301,5 @@ export function DataTableWithSelection<TData, TValue>({
         </div>
       )}
     </div>
-  )
+  );
 }

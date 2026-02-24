@@ -1,7 +1,7 @@
-import * as React from "react";
+﻿import * as React from "react";
 import { Menu, X, Bell, Settings, User, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useMoneyMask } from "@/hooks/use-money-mask";
 import {
   DropdownMenu,
@@ -10,12 +10,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Sidebar, SidebarNavItem } from "../ui/sidebar";
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sidebar, SidebarNavItem } from "@/components/ui/sidebar";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { onLogout } from "@/store/auth/auth.slice";
+import { onLogout } from "@/store/features/auth.slice";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api";

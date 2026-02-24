@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+﻿import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Check, AlertTriangle, X, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -64,10 +64,7 @@ export function RecentActivity({ activities, className }: RecentActivityProps) {
             return (
               <div key={activity?.id} className="flex items-start gap-4">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage
-                    src={activity.user?.avatar}
-                    alt={userName}
-                  />
+                  <AvatarImage src={activity.user?.avatar} alt={userName} />
                   <AvatarFallback>{initials}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 space-y-1">

@@ -1,13 +1,11 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-
-
-const LandingPage = lazy(() => import("./pages/landing-page"));
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 
 const MainDashboardLayout = lazy(
-  () => import("./layouts/dashboard/main-layout"),
+  () => import("@/layout/dashboard/main-layout"),
 );
 
+const NotFound = lazy(() => import("@/pages/not-found"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -19,13 +17,15 @@ function ScrollToTop() {
   return null;
 }
 
+const DashboardPage = lazy(() => import("@/pages/dashboard/index"));
+
 export const AppRouter = () => {
   return (
     <Suspense
       fallback={
-        <div className="flex h-screen  overflow-hidden items-center justify-center bg-gray-50">
+        <div className="flex h-screen overflow-hidden items-center justify-center bg-gray-50">
           <img
-            src="/images/logo-dark.svg"
+            src="/icons/logo-dark.svg"
             alt="Loading"
             className="h-10 w-auto animate-pulse"
           />
@@ -34,7 +34,14 @@ export const AppRouter = () => {
     >
       <ScrollToTop />
       <Routes>
-        <Route path="appointment" element={<LandingPage />}/>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        <Route path="/dashboard" element={<MainDashboardLayout />}>
+          <Route index element={<DashboardPage />} />
+          {/* Logistics features will be added here */}
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

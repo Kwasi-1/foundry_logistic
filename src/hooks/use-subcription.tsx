@@ -1,10 +1,10 @@
-import { useAppDispatch, useAppSelector } from "@/store/store";
+﻿import { useAppDispatch, useAppSelector } from "@/store/store";
 import { variables } from "@/utils/env";
 import { lowerCase } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api";
 import { useEffect } from "react";
-import { onUpdateAuthSlice } from "@/store/auth/auth.slice";
+import { onUpdateAuthSlice } from "@/store/features/auth.slice";
 
 const useSubscription = () => {
   const dispatch = useAppDispatch();
@@ -121,3 +121,4 @@ export interface Item {
   amount: number;
   income_account: string;
 }
+

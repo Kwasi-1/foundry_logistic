@@ -1,4 +1,4 @@
-import { Divider } from "@/components/ui/divider";
+﻿import { Divider } from "@/components/ui/divider";
 import PinnedApps from "./components/pinned-apps";
 import TopBar from "./components/top-bar";
 import LandingPageLayout from "./layout";

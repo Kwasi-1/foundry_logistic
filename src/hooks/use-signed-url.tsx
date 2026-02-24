@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import usePosSASToken from "./use-pos-token";
-import useSASToken from "./use-sas-token";
+﻿import { useMemo } from "react";
+import usePosSASToken from "@/hooks/use-pos-token";
+import useSASToken from "@/hooks/use-sas-token";
 
 export const useSignedImageUrl = (imageUrl?: string) => {
   const isErpImage = imageUrl?.includes("erpapiprod.blob.core.windows.net");
@@ -18,3 +18,5 @@ export const useSignedImageUrl = (imageUrl?: string) => {
 
   return signedImageUrl;
 };
+
+

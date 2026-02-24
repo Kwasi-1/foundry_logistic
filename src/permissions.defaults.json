@@ -1,0 +1,9 @@
+{
+  "finance": {
+    "loans": { "allow_all_users": true, "allowed_roles": [], "allowed_users": [] },
+    "investment_or_account": { "allow_all_users": true, "allowed_roles": [], "allowed_users": [] },
+    "report": { "allow_all_users": true, "allowed_roles": [], "allowed_users": [] },
+    "monitoring": { "allow_all_users": true, "allowed_roles": [], "allowed_users": [] },
+    "organization": { "allow_all_users": true, "allowed_roles": [], "allowed_users": [] }
+  }
+}
