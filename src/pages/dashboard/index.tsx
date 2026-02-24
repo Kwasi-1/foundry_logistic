@@ -15,7 +15,7 @@ export default function Dashboard() {
      * `relative` + `overflow-hidden` locks the viewport so only inner panels scroll.
      */
     <div
-      className="relative -m-6 bg-transparent "
+      className="relative bg-transparent custom-font"
       style={{ height: "calc(100vh - 0px)" }}
     >
       {/* ── BACKGROUND: HERO IMAGE ─────────────────────────────────────────
@@ -61,6 +61,18 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ── TOP-LEFT: WELCOME HEADER ───────────────────────────────────────
+          Displays a welcome greeting over the hero background.
+      ──────────────────────────────────────────────────────────────────── */}
+      <div className="absolute top-8 left-8 z-30 pointer-events-auto">
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+          Welcome back, <span className="text-primary-green">Gibson</span> 👋
+        </h1>
+        <p className="text-sm text-gray-500 font-medium mt-1">
+          Here's what's happening at Foundry Logistics today.
+        </p>
+      </div>
+
       {/* ── FOREGROUND OVERLAY LAYER ────────────────────────────────────────
           This layer sits above the hero image and holds both panels.
           It is NOT scrollable itself — only the inner panels scroll.
@@ -75,9 +87,7 @@ export default function Dashboard() {
           className="pointer-events-auto flex-1 overflow-y-auto scrollbar-hide ml-4"
           style={{ maxHeight: "42vh" }}
         >
-          <CustomContainerComponent styles="bg-white p-3 min-h-full">
-            <StorageGrid />
-          </CustomContainerComponent>
+          <StorageGrid />
         </div>
 
         {/* ── RIGHT: STACKED STAT CARDS PANEL ───────────────────────────────

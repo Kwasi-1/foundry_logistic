@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { StorageDetailsPanel } from "./storage-details-panel";
 import { RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CustomContainerComponent from "../shared/custom.container.component";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -289,7 +290,7 @@ function StorageSectionCard({
       className={cn(
         "relative rounded-2xl h-fit overflow-hidden flex flex-col gap-2 p-3",
         section.highlighted
-          ? "bg-[#e8401a] shadow-md shadow-orange-200/80"
+          ? "bg-primary-green shadow-md shadow-orange-200/80"
           : "bg-primary-gray/30",
       )}
     >
@@ -387,11 +388,12 @@ export function StorageGrid() {
   };
 
   return (
+    <CustomContainerComponent styles="bg-white p-3 w-full min-h-full">
     <div className="w-full h-full flex flex-col">
       {/* ── Toolbar ─────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between mb-3 px-1">
         <div>
-          <h2 className="text-sm font-bold text-gray-800 tracking-tight">
+          <h2 className="text-lg font-bold text-gray-800">
             Warehouse Layout
           </h2>
           <p className="text-[10px] text-gray-500 font-medium mt-0.5">
@@ -435,5 +437,6 @@ export function StorageGrid() {
         />
       )}
     </div>
+    </CustomContainerComponent>
   );
 }

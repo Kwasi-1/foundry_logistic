@@ -4,15 +4,15 @@
 @font-face {
   font-family: "AtypDisplay";
   src:
-    url("./assets/fonts/AtypDisplay-Light.woff2") format("woff2"),
-    url("./assets/fonts/AtypDisplay-Light.woff") format("woff");
+    url("../assets/fonts/AtypDisplay-Light.woff2") format("woff2"),
+    url("../assets/fonts/AtypDisplay-Light.woff") format("woff");
 }
 
 @font-face {
   font-family: "AtypDisplay";
   src:
-    url("./assets/fonts/AtypDisplay-Regular.woff2") format("woff2"),
-    url("./assets/fonts/AtypDisplay-Regular.woff") format("woff");
+    url("../assets/fonts/AtypDisplay-Regular.woff2") format("woff2"),
+    url("../assets/fonts/AtypDisplay-Regular.woff") format("woff");
 }
 * {
   /*font-family: "Inter", sans-serif;*/
@@ -138,4 +138,8 @@ input[type="number"]::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.custom-font {
+  font-family: "AtypDisplay", sans-serif;
 }
