@@ -5,9 +5,11 @@ import { AnalyticsCard } from "@/components/dashboard/analytics-card";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import CustomContainerComponent from "@/components/shared/custom.container.component";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   return (
     /**
@@ -72,6 +74,7 @@ export default function Dashboard() {
                 trendValue="12.4"
                 timeContext="vs Last Month"
                 colorTheme="blue"
+                onActionClick={() => navigate("/dashboard/warehouse")}
                 chartData={[
                   { value: 120000 },
                   { value: 125000 },
@@ -89,6 +92,7 @@ export default function Dashboard() {
                 trendValue="29.0"
                 timeContext="This Week"
                 colorTheme="orange"
+                onActionClick={() => navigate("/dashboard/warehouse")}
                 chartData={[
                   { value: 8000 },
                   { value: 8500 },
@@ -106,6 +110,7 @@ export default function Dashboard() {
                 trendValue="4.2"
                 timeContext="This Week"
                 colorTheme="green"
+                onActionClick={() => navigate("/dashboard/warehouse")}
                 chartData={[
                   { value: 9000 },
                   { value: 9500 },
@@ -123,6 +128,7 @@ export default function Dashboard() {
                 trendValue="15.0"
                 timeContext="Active Items"
                 colorTheme="red"
+                onActionClick={() => navigate("/dashboard/warehouse")}
                 chartData={[
                   { value: 10 },
                   { value: 12 },

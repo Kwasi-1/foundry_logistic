@@ -11,6 +11,8 @@ export interface AnalyticsCardProps {
   chartData?: { value: number }[]; // kept for API compatibility, unused
   className?: string;
   colorTheme?: "blue" | "green" | "red" | "orange" | "purple";
+  onActionClick?: () => void;
+  hideAction?: boolean;
 }
 
 export function AnalyticsCard({
@@ -20,6 +22,8 @@ export function AnalyticsCard({
   trendValue,
   timeContext,
   className,
+  onActionClick,
+  hideAction,
 }: AnalyticsCardProps) {
   const trendTextClass =
     trend === "up"
@@ -38,26 +42,28 @@ export function AnalyticsCard({
       )}
     >
       {/* ── Row 1: Expand button (top-right only) ─────────────────────── */}
-      
 
       {/* ── Row 2: Title & Value ─────────────────────────────────────── */}
       <div className="flex justify-between mb-6">
-      <div className="flex flex-col gap-1.5 mb-2">
-        <p className="text-xs font-semibold text-[#8B98A6] uppercase tracking-wider leading-none">
-          {title}
-        </p>
-        <p className="text-3xl font-bold text-[#111827] tracking-tight leading-none mb-1">
-          {value}
-        </p>
-      </div>
-      <div className="flex justify-end mb-4">
-        <button
-          className="w-8 h-8 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition-colors shadow-sm"
-          title="View details"
-        >
-          <ArrowUpRight className="w-4 h-4 text-gray-600" />
-        </button>
-      </div>
+        <div className="flex flex-col gap-1.5 mb-2">
+          <p className="text-xs font-semibold text-[#8B98A6] uppercase tracking-wider leading-none">
+            {title}
+          </p>
+          <p className="text-3xl font-bold text-[#111827] tracking-tight leading-none mb-1">
+            {value}
+          </p>
+        </div>
+        <div className="flex justify-end mb-4">
+          {!hideAction && (
+            <button
+              onClick={onActionClick}
+              className="w-8 h-8 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition-colors shadow-sm cursor-pointer z-10"
+              title="View details"
+            >
+              <ArrowUpRight className="w-4 h-4 text-gray-600" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ── Row 3: Trend % + Context label ───────────────────────────── */}

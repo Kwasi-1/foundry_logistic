@@ -27,7 +27,6 @@ export default function MainDashboardLayout({
     permissions.some((permission) => can(permission));
 
   const navPermissionByHref: Record<string, string> = {
-    "/dashboard": PERMISSIONS.dashboardHome,
     "/dashboard/sales/invoices": PERMISSIONS.salesInvoicesList,
     "/dashboard/sales/pos-invoice": PERMISSIONS.salesPosInvoicesList,
     "/dashboard/sales/customers": PERMISSIONS.salesCustomersList,
@@ -59,6 +58,11 @@ export default function MainDashboardLayout({
       title: "Dashboard",
       icon: <IconlyHome size={20} />,
       href: "/dashboard",
+    },
+    {
+      title: "Warehouse Layout",
+      icon: <IconlyBuilding size={20} />,
+      href: "/dashboard/warehouse",
     },
     {
       title: "Inventory",

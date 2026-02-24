@@ -18,6 +18,9 @@ function ScrollToTop() {
 }
 
 const DashboardPage = lazy(() => import("@/pages/dashboard/index"));
+const WarehouseLayoutPage = lazy(
+  () => import("@/pages/dashboard/warehouse-layout"),
+);
 
 export const AppRouter = () => {
   return (
@@ -39,6 +42,7 @@ export const AppRouter = () => {
 
         <Route path="/dashboard" element={<MainDashboardLayout />}>
           <Route index element={<DashboardPage />} />
+          <Route path="warehouse" element={<WarehouseLayoutPage />} />
           {/* Logistics features will be added here */}
         </Route>
 
