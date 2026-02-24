@@ -34,7 +34,8 @@ export const AppRouter = () => {
     >
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* <Route path="/" element={<Navigate to="/dashboard" replace />} /> */}
+        <Route path="/" element={<DashboardPage />} />
 
         <Route path="/dashboard" element={<MainDashboardLayout />}>
           <Route index element={<DashboardPage />} />
